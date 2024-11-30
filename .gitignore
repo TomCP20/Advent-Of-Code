@@ -1,2 +1,5 @@
 in.txt
 test.txt
+*.exe
+.fake
+/.vscode
