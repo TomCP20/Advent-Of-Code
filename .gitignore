@@ -2,6 +2,10 @@ in.txt
 test.txt
 *.exe
 *.pdb
+debug/
+target/
+Cargo.lock
+**/*.rs.bk
 .fake
 /.vscode
 */obj
