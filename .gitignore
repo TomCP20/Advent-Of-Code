@@ -3,3 +3,5 @@ test.txt
 *.exe
 .fake
 /.vscode
+*/obj
+*/bin
