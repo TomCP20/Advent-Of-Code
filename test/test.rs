@@ -1,6 +1,5 @@
 fn main() {
-    let lines = std::io::stdin().lines();
-    for line in lines {
-        println!("{}", line.unwrap());
-    }
+    let lines: Vec<String> = std::io::stdin().lines().collect::<Result<_, _>>().unwrap();
+    let s = lines.join("\n");
+    println!("{}", s);
 }
