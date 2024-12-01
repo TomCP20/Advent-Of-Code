@@ -7,6 +7,6 @@ target/
 Cargo.lock
 **/*.rs.bk
 .fake
-/.vscode
+.vscode/
 obj/
 bin/
