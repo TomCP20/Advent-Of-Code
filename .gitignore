@@ -1,6 +1,7 @@
 in.txt
 test.txt
 *.exe
+*.pdb
 .fake
 /.vscode
 */obj
