@@ -8,5 +8,5 @@ Cargo.lock
 **/*.rs.bk
 .fake
 /.vscode
-*/obj
-*/bin
+obj/
+bin/
