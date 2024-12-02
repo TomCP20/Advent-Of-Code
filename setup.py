@@ -24,7 +24,7 @@ for i in range(1, 26):
 
     #F#
     os.makedirs(os.path.join(day_path, "F#"))
-    subprocess.run(["dotnet", "new", "console", "--language", "\"F#\""], cwd=os.path.join(day_path, "F#"))
+    subprocess.run(["dotnet", "new", "console", "-lang", "F#"], cwd=os.path.join(day_path, "F#"))
 
     #Rust    
     os.makedirs(os.path.join(day_path, "Rust"))
