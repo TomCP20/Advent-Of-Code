@@ -1,6 +1,5 @@
 ﻿List<string> lines = [];
-string? line;
-while ((line = Console.ReadLine()) != null)
+while (Console.ReadLine() is string line)
 {
     lines.Add(line);
 }
