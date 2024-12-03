@@ -1,5 +1,5 @@
 input.txt
-test.txt
+test*.txt
 *.exe
 *.pdb
 debug/
