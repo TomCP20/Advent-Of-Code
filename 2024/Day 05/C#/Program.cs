@@ -1,15 +1,14 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-bool isSorted((int, int)[] rules, int[] update)
+﻿static Comparison<int> getCompare((int, int)[] rules)
 {
-    foreach ((int l, int r) in rules)
+    return (a, b) =>
     {
-        if (update.Contains(l) && update.Contains(r) && !(Array.IndexOf(update, l) < Array.IndexOf(update, r)))
+        foreach ((int l, int r) in rules)
         {
-            return false;
+            if (a == l && b == r) { return 1; }
+            if (b == l && a == r) { return -1; }
         }
-    }
-    return true;
+        return 0;
+    };
 }
 
 List<string> lines = [];
@@ -25,30 +24,15 @@ int sum2 = 0;
 foreach (int[] update in updates)
 {
     int mid = (update.Length - 1) / 2;
-    if (isSorted(rules, update))
+    if (!rules.Any((rule) => update.Contains(rule.Item1) && update.Contains(rule.Item2) && !(Array.IndexOf(update, rule.Item1) < Array.IndexOf(update, rule.Item2))))
     {
         sum1 += update[mid];
     }
     else
     {
-        do
-        {
-            foreach ((int l, int r) in rules)
-            {
-                if (update.Contains(l) && update.Contains(r))
-                {
-                    int li = Array.IndexOf(update, l);
-                    int ri = Array.IndexOf(update, r);
-                    if (!(li < ri))
-                    {
-                        (update[ri], update[li]) = (update[li], update[ri]);
-                    }
-                }
-            }
-        } while (!isSorted(rules, update));
+        Array.Sort(update, getCompare(rules));
         sum2 += update[mid];
     }
-
 }
 Console.WriteLine(sum1);
 Console.WriteLine(sum2);
