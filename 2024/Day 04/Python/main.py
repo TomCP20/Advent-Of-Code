@@ -1,4 +1,3 @@
-from itertools import permutations
 import re
 
 input = open(0).read()
