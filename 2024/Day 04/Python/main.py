@@ -1,8 +1,8 @@
 import re
 
 input = open(0).read()
-row = len(input.splitlines()[0]) + 8
-padded_input = "".join("...." + line + "...." for line in input.splitlines())
+row = len(input.splitlines()[0]) + 6
+padded_input = "".join("..." + line + "..." for line in input.splitlines())
 
 count1 = 0
 for o in map(str, [0, row, row-1, row-2]):
