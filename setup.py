@@ -7,9 +7,12 @@ dirname = os.path.dirname(__file__)
 
 year = "2024"
 
-for i in range(1, 26):
+for i in range(4, 26):
     day_path = os.path.join(dirname, year, f"Day {i:02d}")
 
+    #inputs
+    open(os.path.join(day_path, "test.txt"), 'a').close()
+    open(os.path.join(day_path, "input.txt"), 'a').close()
     #Python
     os.makedirs(os.path.join(day_path, "Python"))
     open(os.path.join(day_path, "Python", "main.py"), 'a').close()
