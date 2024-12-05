@@ -1,6 +1,6 @@
 use std::io;
 
-fn is_safe(report: &Vec<i32>) -> bool {
+fn is_safe(report: &[i32]) -> bool {
     let differences: Vec<i32> = report
         .iter()
         .zip(report.iter().skip(1))
@@ -8,11 +8,11 @@ fn is_safe(report: &Vec<i32>) -> bool {
         .collect();
     let inc: bool = differences.iter().all(|x| (1 <= *x) && (*x <= 3));
     let dec: bool = differences.into_iter().all(|x| (1 <= -x) && (-x <= 3));
-    return inc || dec;
+    inc || dec
 }
 
-fn is_safeish(report: &Vec<i32>) -> bool {
-    return is_safe(report) || { 0..report.len() }.any(|i| {
+fn is_safeish(report: &[i32]) -> bool {
+    is_safe(report) || { 0..report.len() }.any(|i| {
         is_safe(
             &report
                 .iter()
@@ -21,7 +21,7 @@ fn is_safeish(report: &Vec<i32>) -> bool {
                 .map(|(_, v)| *v)
                 .collect::<Vec<i32>>(),
         )
-    });
+    })
 }
 
 fn main() {
