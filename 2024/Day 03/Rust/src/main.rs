@@ -2,7 +2,7 @@ use regex::{Match, Regex};
 use std::io;
 
 fn int_parse(str: Option<Match>) -> i32 {
-    return str.unwrap().as_str().parse::<i32>().unwrap();
+    str.unwrap().as_str().parse::<i32>().unwrap()
 }
 
 fn main() {
