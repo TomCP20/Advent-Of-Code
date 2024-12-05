@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 List<string> lines = [];
 while (Console.ReadLine() is string line) { lines.Add(line); }
