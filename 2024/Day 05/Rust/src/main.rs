@@ -1,11 +1,16 @@
-use std::io;
 use std::cmp::Ordering;
+use std::io;
 
 fn get_cmp(rules: Vec<(i32, i32)>) -> impl Fn(&i32, &i32) -> Ordering {
-    move |a:&i32, b:&i32|
-    if rules.contains(&(*a, *b)) { Ordering::Less }
-    else if rules.contains(&(*b, *a)) { Ordering::Greater }
-    else {Ordering::Equal}
+    move |a: &i32, b: &i32| {
+        if rules.contains(&(*a, *b)) {
+            Ordering::Less
+        } else if rules.contains(&(*b, *a)) {
+            Ordering::Greater
+        } else {
+            Ordering::Equal
+        }
+    }
 }
 
 fn main() {
@@ -38,14 +43,14 @@ fn main() {
         if rules
             .iter()
             .map(|(l, r)| {
-                !(update.contains(l) && update.contains(r) && !(update.iter().position(|x| x == l) < update.iter().position(|x| x == r)))
+                !(update.contains(l)
+                    && update.contains(r)
+                    && update.iter().position(|x| x == l) >= update.iter().position(|x| x == r))
             })
             .all(|x| x)
         {
             sum1 += update[mid];
-        }
-        else
-        {
+        } else {
             update.sort_unstable_by(&cmp);
             sum2 += update[mid];
         }
