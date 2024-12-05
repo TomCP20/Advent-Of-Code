@@ -10,9 +10,6 @@ def getCmp(rules: list[list[int]]):
         return 0
     return cmp
 
-def isSorted(rules: list[list[int]], update: list[int]) -> bool:
-    return all(not (l in update and r in update and not (update.index(l) < update.index(r))) for (l,r) in rules)
-
 input = open(0).read()
 a, b = input.split("\n\n", 1)
 
@@ -23,7 +20,7 @@ sum1 = 0
 sum2 = 0
 for update in updates:
     mid = int((len(update) - 1)/2)
-    if isSorted(rules, update):
+    if all(not (l in update and r in update and not (update.index(l) < update.index(r))) for (l,r) in rules):
         sum1 += update[mid]
     else:
         update.sort(key=cmp_to_key(getCmp(rules)))
