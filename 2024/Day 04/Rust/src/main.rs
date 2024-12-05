@@ -1,5 +1,5 @@
 use regex::Regex;
-use std::{io, usize};
+use std::io;
 
 fn overlapping(pattern: &str, input: &str) -> usize {
     println!("{}", pattern);
@@ -16,38 +16,16 @@ fn overlapping(pattern: &str, input: &str) -> usize {
             }
         }
     }
-    return count;
+    count
 }
 
 fn get_pattern_1(offset: usize) -> String {
-    let o = offset.to_string();
-    return r"X.{".to_owned()
-        + &o
-        + r"}M.{"
-        + &o
-        + r"}A.{"
-        + &o
-        + r"}S|S.{"
-        + &o
-        + r"}A.{"
-        + &o
-        + r"}M.{"
-        + &o
-        + r"}X";
+    let o = &(r".{".to_owned() + &offset.to_string() + r"}");
+    r"X".to_owned() + o + r"M" + o + r"A" + o + r"S|S" + o + r"A" + o + r"M" + o + r"X"
 }
 
 fn get_pattern_2(perm: (&str, &str, &str, &str), n: &str) -> String {
-    return perm.0.to_owned()
-        + r"."
-        + perm.1
-        + r".{"
-        + n
-        + r"}A.{"
-        + n
-        + r"}"
-        + perm.2
-        + r"."
-        + perm.3;
+    perm.0.to_owned() + r"." + perm.1 + r".{" + n + r"}A.{" + n + r"}" + perm.2 + r"." + perm.3
 }
 
 fn main() {
