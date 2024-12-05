@@ -2,7 +2,7 @@
 
 List<string> lines = [];
 while (Console.ReadLine() is string line) { lines.Add(line); }
-string input = string.Join(", ", lines);
+string input = string.Join("", lines);
 
 Regex pattern1 = new(@"mul\((\d+),(\d+)\)");
 Console.WriteLine(pattern1.Matches(input).Select(match => int.Parse(match.Groups[1].ToString()) * int.Parse(match.Groups[2].ToString())).Sum());
