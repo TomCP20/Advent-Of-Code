@@ -1,4 +1,4 @@
-def part1(initial_guard_pos, obstacles, width, height):
+def get_path(initial_guard_pos, obstacles, width, height):
     guard_pos = initial_guard_pos
     guard_path = set()
     turns = 0
@@ -12,7 +12,7 @@ def part1(initial_guard_pos, obstacles, width, height):
             turns = (turns + 1) % 4
         else:
             guard_pos = next_guard_pos
-    return len(guard_path)
+    return guard_path
 
 def detect_loop(initial_guard_pos, obstacles, width, height):
     guard_pos = initial_guard_pos
@@ -46,14 +46,7 @@ for (y, line) in enumerate(lines):
         elif char == "^":
             initial_guard_pos = (x, y)
 
-print(part1(initial_guard_pos, obstacles, width, height))
+path = get_path(initial_guard_pos, obstacles, width, height)
 
-loop = 0
-
-for y in range(height):
-    for x in range(width):
-        if (x, y) not in obstacles:
-            new_obstacles = obstacles | {(x, y)}
-            if detect_loop(initial_guard_pos, new_obstacles, width, height):
-                loop +=1
-print(loop)
+print((len(path)))
+print(sum(detect_loop(initial_guard_pos, obstacles | {(x, y)}, width, height) for (x, y) in path - {initial_guard_pos}))
