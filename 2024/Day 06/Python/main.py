@@ -1,6 +1,5 @@
 from itertools import pairwise
 
-
 dirs = [(0, -1), (1, 0), (0, 1), (-1, 0)]
 
 def traverse(initial_guard_state: tuple[tuple[int, int], int], obstacles: set[tuple[int, int]], width: int, height: int):
@@ -13,9 +12,6 @@ def traverse(initial_guard_state: tuple[tuple[int, int], int], obstacles: set[tu
             turns = (turns + 1) % 4
         else:
             guard_pos = next_guard_pos
-
-def get_path(initial_guard_state: tuple[tuple[int, int], int], obstacles: set[tuple[int, int]], width: int, height: int):
-    return { guard_pos for (guard_pos, _) in traverse(initial_guard_state, obstacles, width, height) }
 
 def detect_loop(initial_guard_state: tuple[tuple[int, int], int], obstacles: set[tuple[int, int]], width: int, height: int):
     state_set: set[tuple[tuple[int, int], int]] = set()
@@ -44,9 +40,7 @@ def main():
             elif char == "<":
                 initial_guard_state = ((x, y), 3)
 
-    path: set[tuple[int, int]] = get_path(initial_guard_state, obstacles, width, height)
-
-    print((len(path)))
+    print((len({ guard_pos for (guard_pos, _) in traverse(initial_guard_state, obstacles, width, height) })))
     checked: set[tuple[int, int]] = set()
     loops = 0
     for new_start, (obstacle_pos, _) in pairwise(traverse(initial_guard_state, obstacles, width, height)):
