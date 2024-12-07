@@ -1,27 +1,22 @@
-def traverse(initial_guard_pos: tuple[int, int], obstacles: set[tuple[int, int]], width: int, height: int):
-    guard_pos = initial_guard_pos
-    turns = 0
+dirs = [(0, -1), (1, 0), (0, 1), (-1, 0)]
+
+def traverse(initial_guard_state: tuple[tuple[int, int], int], obstacles: set[tuple[int, int]], width: int, height: int):
+    (guard_pos, turns) = initial_guard_state
     while 0 <= guard_pos[0] < width and 0 <= guard_pos[1] < height:
-        (guard_pos, turns) = step(guard_pos, turns, obstacles)
         yield (guard_pos, turns)
+        guard_dir = dirs[turns]
+        next_guard_pos = (guard_dir[0] + guard_pos[0], guard_dir[1] + guard_pos[1])
+        if (next_guard_pos in obstacles):
+            turns = (turns + 1) % 4
+        else:
+            guard_pos = next_guard_pos
 
-def step(guard_pos: tuple[int, int], turns: int, obstacles: set[tuple[int, int]]):
-    guard_dir = [(0, -1), (1, 0), (0, 1), (-1, 0)][turns]
-    next_guard_pos = (guard_dir[0] + guard_pos[0], guard_dir[1] + guard_pos[1])
-    if (next_guard_pos in obstacles):
-        return (guard_pos, (turns + 1) % 4)
-    else:
-        return (next_guard_pos, turns)
+def get_path(initial_guard_state: tuple[tuple[int, int], int], obstacles: set[tuple[int, int]], width: int, height: int):
+    return { guard_pos for (guard_pos, _) in traverse(initial_guard_state, obstacles, width, height) }
 
-def get_path(initial_guard_pos: tuple[int, int], obstacles: set[tuple[int, int]], width: int, height: int):
-    guard_path: set[tuple[int, int]] = {initial_guard_pos}
-    for (guard_pos, _) in traverse(initial_guard_pos, obstacles, width, height):
-        guard_path.add(guard_pos)
-    return guard_path
-
-def detect_loop(initial_guard_pos: tuple[int, int], obstacles: set[tuple[int, int]], width: int, height: int):
-    state_set: set[tuple[tuple[int, int], int]] = {(initial_guard_pos, 0)}
-    for (guard_pos, turns) in traverse(initial_guard_pos, obstacles, width, height):
+def detect_loop(initial_guard_state: tuple[tuple[int, int], int], obstacles: set[tuple[int, int]], width: int, height: int):
+    state_set: set[tuple[tuple[int, int], int]] = set()
+    for (guard_pos, turns) in traverse(initial_guard_state, obstacles, width, height):
         if (guard_pos, turns) in state_set:
             return True
         state_set.add((guard_pos, turns))
@@ -40,9 +35,9 @@ def main():
             elif char == "^":
                 initial_guard_pos = (x, y)
 
-    path: set[tuple[int, int]] = get_path(initial_guard_pos, obstacles, width, height)
+    path: set[tuple[int, int]] = get_path((initial_guard_pos, 0), obstacles, width, height)
 
     print((len(path)))
-    print(sum(detect_loop(initial_guard_pos, obstacles | {(x, y)}, width, height) for (x, y) in path - {initial_guard_pos}))
+    print(sum(detect_loop((initial_guard_pos, 0), obstacles | {(x, y)}, width, height) for (x, y) in path - {initial_guard_pos}))
 
 main()
