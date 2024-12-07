@@ -28,7 +28,7 @@ def detect_loop(initial_guard_state: tuple[tuple[int, int], int], obstacles: set
 def main():
     lines: list[str] = (open(0).read().splitlines())
     obstacles: set[tuple[int, int]] = set()
-    initial_guard_pos: tuple[int, int] = (-1, -1)
+    initial_guard_state: tuple[tuple[int, int], int] = ((-1, -1), -1)
     width: int = len(lines[0])
     height: int = len(lines)
     for (y, line) in enumerate(lines):
@@ -36,14 +36,20 @@ def main():
             if char == "#":
                 obstacles.add((x, y))
             elif char == "^":
-                initial_guard_pos = (x, y)
+                initial_guard_state = ((x, y), 0)
+            elif char == ">":
+                initial_guard_state = ((x, y), 1)
+            elif char == "v":
+                initial_guard_state = ((x, y), 2)
+            elif char == "<":
+                initial_guard_state = ((x, y), 3)
 
-    path: set[tuple[int, int]] = get_path((initial_guard_pos, 0), obstacles, width, height)
+    path: set[tuple[int, int]] = get_path(initial_guard_state, obstacles, width, height)
 
     print((len(path)))
     checked: set[tuple[int, int]] = set()
     loops = 0
-    for new_start, (obstacle_pos, _) in pairwise(traverse((initial_guard_pos, 0), obstacles, width, height)):
+    for new_start, (obstacle_pos, _) in pairwise(traverse(initial_guard_state, obstacles, width, height)):
         if obstacle_pos not in checked:
             checked.add(obstacle_pos)
             if detect_loop(new_start, obstacles | {obstacle_pos}, width, height):
