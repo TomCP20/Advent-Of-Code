@@ -13,6 +13,13 @@ def traverse(initial_guard_state: tuple[tuple[int, int], int], obstacles: set[tu
         else:
             guard_pos = next_guard_pos
 
+def get_obstacle_pos(initial_guard_state: tuple[tuple[int, int], int], obstacles: set[tuple[int, int]], width: int, height: int):
+    checked: set[tuple[int, int]] = set()
+    for new_start, (obstacle_pos, _) in pairwise(traverse(initial_guard_state, obstacles, width, height)):
+        if obstacle_pos not in checked:
+            checked.add(obstacle_pos)
+            yield (new_start, obstacle_pos)
+
 def detect_loop(initial_guard_state: tuple[tuple[int, int], int], obstacles: set[tuple[int, int]], width: int, height: int):
     state_set: set[tuple[tuple[int, int], int]] = set()
     for (guard_pos, turns) in traverse(initial_guard_state, obstacles, width, height):
@@ -25,8 +32,8 @@ def main():
     lines: list[str] = (open(0).read().splitlines())
     obstacles: set[tuple[int, int]] = set()
     initial_guard_state: tuple[tuple[int, int], int] = ((-1, -1), -1)
-    width: int = len(lines[0])
-    height: int = len(lines)
+    w: int = len(lines[0])
+    h: int = len(lines)
     for (y, line) in enumerate(lines):
         for (x, char) in enumerate(line):
             if char == "#":
@@ -40,13 +47,6 @@ def main():
             elif char == "<":
                 initial_guard_state = ((x, y), 3)
 
-    print((len({ guard_pos for (guard_pos, _) in traverse(initial_guard_state, obstacles, width, height) })))
-    checked: set[tuple[int, int]] = set()
-    loops = 0
-    for new_start, (obstacle_pos, _) in pairwise(traverse(initial_guard_state, obstacles, width, height)):
-        if obstacle_pos not in checked:
-            checked.add(obstacle_pos)
-            if detect_loop(new_start, obstacles | {obstacle_pos}, width, height):
-                loops+=1
-    print(loops)
+    print((len({ guard_pos for (guard_pos, _) in traverse(initial_guard_state, obstacles, w, h) })))
+    print(sum(detect_loop(state, obstacles | {obstacle_pos}, w, h) for state, obstacle_pos in get_obstacle_pos(initial_guard_state, obstacles, w, h)))
 main()
