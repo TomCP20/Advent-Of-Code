@@ -1,3 +1,6 @@
+from itertools import pairwise
+
+
 dirs = [(0, -1), (1, 0), (0, 1), (-1, 0)]
 
 def traverse(initial_guard_state: tuple[tuple[int, int], int], obstacles: set[tuple[int, int]], width: int, height: int):
@@ -38,6 +41,12 @@ def main():
     path: set[tuple[int, int]] = get_path((initial_guard_pos, 0), obstacles, width, height)
 
     print((len(path)))
-    print(sum(detect_loop((initial_guard_pos, 0), obstacles | {(x, y)}, width, height) for (x, y) in path - {initial_guard_pos}))
-
+    checked: set[tuple[int, int]] = set()
+    loops = 0
+    for new_start, (obstacle_pos, _) in pairwise(traverse((initial_guard_pos, 0), obstacles, width, height)):
+        if obstacle_pos not in checked:
+            checked.add(obstacle_pos)
+            if detect_loop(new_start, obstacles | {obstacle_pos}, width, height):
+                loops+=1
+    print(loops)
 main()
