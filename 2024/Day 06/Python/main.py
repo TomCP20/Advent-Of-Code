@@ -22,10 +22,10 @@ def get_obstacle_pos(initial_guard_state: tuple[tuple[int, int], int], obstacles
 
 def detect_loop(initial_guard_state: tuple[tuple[int, int], int], obstacles: set[tuple[int, int]], width: int, height: int):
     state_set: set[tuple[tuple[int, int], int]] = set()
-    for (guard_pos, turns) in traverse(initial_guard_state, obstacles, width, height):
-        if (guard_pos, turns) in state_set:
+    for state in traverse(initial_guard_state, obstacles, width, height):
+        if state in state_set:
             return True
-        state_set.add((guard_pos, turns))
+        state_set.add(state)
     return False
 
 def main():
