@@ -36,16 +36,17 @@ def main():
     h: int = len(lines)
     for (y, line) in enumerate(lines):
         for (x, char) in enumerate(line):
-            if char == "#":
-                obstacles.add((x, y))
-            elif char == "^":
-                initial_guard_state = ((x, y), 0)
-            elif char == ">":
-                initial_guard_state = ((x, y), 1)
-            elif char == "v":
-                initial_guard_state = ((x, y), 2)
-            elif char == "<":
-                initial_guard_state = ((x, y), 3)
+            match char:
+                case "#":
+                    obstacles.add((x, y))
+                case "^":
+                    initial_guard_state = ((x, y), 0)
+                case ">":
+                    initial_guard_state = ((x, y), 1)
+                case "v":
+                    initial_guard_state = ((x, y), 2)
+                case "<":
+                    initial_guard_state = ((x, y), 3)
 
     print((len({ guard_pos for (guard_pos, _) in traverse(initial_guard_state, obstacles, w, h) })))
     print(sum(detect_loop(state, obstacles | {obstacle_pos}, w, h) for state, obstacle_pos in get_obstacle_pos(initial_guard_state, obstacles, w, h)))
