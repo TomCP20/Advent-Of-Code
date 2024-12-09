@@ -39,12 +39,17 @@ int coord_to_int(std::pair<int, int> pos)
     return coord_to_int(pos.first, pos.second);
 }
 
+int state_to_int(std::pair<std::pair<int, int>, int> state)
+{
+    return 40 * coord_to_int(state.first) + state.second;
+}
+
 bool in_bounds(std::pair<int, int> &pos, int w, int h)
 {
     return 0 <= pos.first && pos.first < w && 0 <= pos.second && pos.second < h;
 }
 
-std::pair<std::pair<int, int>, int> step(std::pair<std::pair<int, int>, int> &state, std::unordered_set<int> &obstacles)
+std::pair<std::pair<int, int>, int> step(std::pair<std::pair<int, int>, int> state, std::unordered_set<int> &obstacles)
 {
     std::pair<int, int> guard_pos = state.first;
     int turns = state.second;
@@ -74,9 +79,47 @@ int part1(std::pair<std::pair<int, int>, int> state, std::unordered_set<int> obs
     return traversed.size();
 }
 
+bool detect_loop(std::pair<std::pair<int, int>, int> state, std::unordered_set<int> obstacles, int w, int h)
+{
+    std::unordered_set<int> checked;
+    while (in_bounds(state.first, w, h))
+    {
+        int x = state_to_int(state);
+        if (checked.find(x) != obstacles.end())
+        {
+            return true;
+        }
+        checked.insert(x);
+        state = step(state, obstacles);
+    }
+    return false;
+}
+
+int part2(std::pair<std::pair<int, int>, int> state, std::unordered_set<int> obstacles, int w, int h)
+{
+    int count = 0;
+    std::vector<std::pair<std::pair<int, int>, int>> path;
+    while (in_bounds(state.first, w, h))
+    {
+        path.push_back(state);
+        state = step(state, obstacles);
+    }
+    for (int i = 0; i < path.size() - 1; i++)
+    {
+        std::pair<std::pair<int, int>, int> new_state = path[i];
+        std::pair<int, int> obstacle_pos = path[i+1].first;
+        std::unordered_set<int> new_obstacles = obstacles;
+        new_obstacles.insert(coord_to_int(obstacle_pos));
+        if (detect_loop(new_state, new_obstacles, w, h))
+        {
+            count++;
+        }
+    }
+    return count;    
+}
+
 int main(int argc, char *argv[])
 {
-    std::cout << "start" << std::endl;
     std::string line;
     int y = 0;
     auto hash = [](const std::pair<int, int> &p)
@@ -113,4 +156,5 @@ int main(int argc, char *argv[])
     int h = y;
     int w = line.length();
     std::cout << part1(state, obstacles, h, w) << std::endl;
+    std::cout << part2(state, obstacles, h, w) << std::endl;
 }
