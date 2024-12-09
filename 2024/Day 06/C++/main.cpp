@@ -79,17 +79,18 @@ int part1(std::pair<std::pair<int, int>, int> state, std::unordered_set<int> obs
     return traversed.size();
 }
 
-bool detect_loop(std::pair<std::pair<int, int>, int> state, std::unordered_set<int> obstacles, int w, int h)
+bool detect_loop(std::pair<std::pair<int, int>, int> &initial_state, std::unordered_set<int> &obstacles, int w, int h)
 {
-    std::unordered_set<int> checked;
+    std::pair<std::pair<int, int>, int> state = initial_state;
+    std::unordered_set<int> state_set;
     while (in_bounds(state.first, w, h))
     {
         int x = state_to_int(state);
-        if (checked.find(x) != obstacles.end())
+        if (state_set.find(x) != obstacles.end())
         {
             return true;
         }
-        checked.insert(x);
+        state_set.insert(x);
         state = step(state, obstacles);
     }
     return false;
@@ -104,26 +105,29 @@ int part2(std::pair<std::pair<int, int>, int> state, std::unordered_set<int> obs
         path.push_back(state);
         state = step(state, obstacles);
     }
+    std::unordered_set<int> checked;
     for (int i = 0; i < path.size() - 1; i++)
     {
         std::pair<std::pair<int, int>, int> new_state = path[i];
-        std::pair<int, int> obstacle_pos = path[i+1].first;
-        std::unordered_set<int> new_obstacles = obstacles;
-        new_obstacles.insert(coord_to_int(obstacle_pos));
-        if (detect_loop(new_state, new_obstacles, w, h))
+        int obstacle_pos = coord_to_int(path[i + 1].first);
+        if (checked.find(obstacle_pos) == checked.end())
         {
-            count++;
+            checked.insert(obstacle_pos);
+            std::unordered_set<int> new_obstacles = obstacles;
+            new_obstacles.insert(obstacle_pos);
+            if (detect_loop(new_state, new_obstacles, w, h))
+            {
+                count++;
+            }
         }
     }
-    return count;    
+    return count;
 }
 
 int main(int argc, char *argv[])
 {
     std::string line;
     int y = 0;
-    auto hash = [](const std::pair<int, int> &p)
-    { return p.first * 256 + p.second; };
     std::unordered_set<int> obstacles;
     std::pair<std::pair<int, int>, int> state;
     while (std::getline(std::cin, line))
