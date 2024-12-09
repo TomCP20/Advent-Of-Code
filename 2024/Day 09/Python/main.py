@@ -30,10 +30,11 @@ disk2 = disk.copy()
 for id in range(max_id, -1, -1):
     size = disk2.count(id)
     start = disk2.index(id)
-    for _, l in groupby(filter(lambda x : x[1] == None, enumerate(disk2)), key=lambda x : x[1]):
-        group = list(l)
-        if len(group) >= size and start > group[0][0]:
-                print(disk2[group[i][0]], disk2[start+i])
-                disk2[group[i][0]], disk2[start+i] = disk2[start+i], None
+    for val, l in groupby(enumerate(disk2), key=lambda x : x[1]):
+        if val == None:
+            group = list(l)
+            if len(group) >= size and start > group[0][0]:
+                for i in range(size):
+                    disk2[group[i][0]], disk2[start+i] = disk2[start+i], None
 
 print(sum(i*n for i, n in enumerate(disk2) if n != None))
