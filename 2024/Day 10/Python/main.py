@@ -1,3 +1,9 @@
+def get_trailheads(topo_map: list[list[int]], w: int, h: int):
+    for y in range(h):
+        for x in range(w):
+            if topo_map[y][x] == 0:
+                yield (x, y)
+
 def get_neighbors(x: int, y: int, w: int, h: int):
     if y < h-1:
         yield (x, y+1)
@@ -21,18 +27,5 @@ topo_map = [list(map(int, line)) for line in open(0).read().splitlines()]
 w = len(topo_map[0])
 h = len(topo_map)
 
-score1 = 0
-for y in range(h):
-    for x in range(w):
-        if topo_map[y][x] == 0:
-            score1 += len(set(DFS(topo_map, x, y, w, h)))
-
-print(score1)
-
-score2 = 0
-for y in range(h):
-    for x in range(w):
-        if topo_map[y][x] == 0:
-            score2 += len(list(DFS(topo_map, x, y, w, h)))
-
-print(score2)
+print(sum(len(set(DFS(topo_map, x, y, w, h))) for (x, y) in get_trailheads(topo_map, w, h)))
+print(sum(len(list(DFS(topo_map, x, y, w, h))) for (x, y) in get_trailheads(topo_map, w, h)))
