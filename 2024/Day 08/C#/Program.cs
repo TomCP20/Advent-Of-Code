@@ -11,9 +11,9 @@ foreach (var (line, x) in lines.Select((line, x) => (line, x)))
     {
         if (c != '.')
         {
-            if (antennas.ContainsKey(c))
+            if (antennas.TryGetValue(c, out List<(int, int)>? l))
             {
-                antennas[c].Add((x, y));
+                l.Add((x, y));
             }
             else
             {
