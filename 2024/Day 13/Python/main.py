@@ -1,5 +1,3 @@
-from itertools import combinations
-
 def get_seed(h, w, checked):
     for y in range(h):
         for x in range(w):
@@ -8,46 +6,43 @@ def get_seed(h, w, checked):
     print("error checked full")
     return (-1, -1)
 
-def get_perimiter(region):
-    perimiter = len(region)*4
-    for a, b in combinations(region, 2):
-        if (abs(a[0] - b[0]) == 1 and a[1] == b[1]) or (abs(a[1] - b[1]) == 1 and a[0] == b[0]):
-            perimiter -= 2
-    return perimiter
-
-
 lines = open(0).read().splitlines()
-
 w = len(lines[0])
 h = len(lines)
-
 checked = set()
-
 price = 0
 while len(checked) < w * h:
     seed = get_seed(h, w, checked)
     q = [seed]
     val = lines[seed[1]][seed[0]]
     region = set()
+    perimiter = 0
     while q:
         n = q.pop()
-        if val == lines[n[1]][n[0]]:
+        if n not in region:
             region.add(n)
             checked.add(n)
             west = (n[0]-1, n[1])
-            if 0 < n[0] and west not in region:
+            if 0 < n[0] and val == lines[west[1]][west[0]]:
                 q.append(west)
+            else:
+                perimiter += 1
             east = (n[0]+1, n[1])
-            if n[0] < w-1 and east not in region:
+            if n[0] < w-1 and val == lines[east[1]][east[0]]:
                 q.append(east)
+            else:
+                perimiter += 1
             north = (n[0], n[1]-1)
-            if 0 < n[1] and north not in region:
+            if 0 < n[1] and val == lines[north[1]][north[0]]:
                 q.append(north)
+            else:
+                perimiter += 1
             south = (n[0], n[1]+1)
-            if n[1] < h-1 and south not in region:
+            if n[1] < h-1 and val == lines[south[1]][south[0]]:
                 q.append(south)
+            else:
+                perimiter += 1
     area = len(region)
-    perimiter = get_perimiter(region)
     price += area * perimiter
 
 print(price)
