@@ -1,6 +1,5 @@
 from itertools import permutations
 
-
 antennas = {}
 
 input = open(0).read().splitlines()
