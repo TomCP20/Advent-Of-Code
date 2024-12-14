@@ -3,12 +3,7 @@ import re
 def get_price(m: re.Match[str] | None, part2: bool):
     if not m:
         return 0
-    ax = int(m.group(1))
-    ay = int(m.group(2))
-    bx = int(m.group(3))
-    by = int(m.group(4))
-    px = int(m.group(5))
-    py = int(m.group(6))
+    ax, ay, bx, by, px, py = map(int, m.groups())
 
     if part2:
         px += 10000000000000
