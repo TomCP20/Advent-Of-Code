@@ -11,11 +11,69 @@ def move_box1(box_pos: tuple[int, int], dir: tuple[int, int], boxes: set[tuple[i
 
 def move_box2(box_pos: tuple[int, int], dir: tuple[int, int], boxes: set[tuple[int, int]], walls: set[tuple[int, int]]):
     npos = add(box_pos, dir)
-    if npos in walls or (npos in boxes and not move_box1(npos, dir, boxes, walls)):
-        return False
-    boxes.add(npos)
-    boxes.remove(box_pos)
-    return True
+   
+    if dir == (1, 0): # right
+        if add(box_pos, (2, 0)) in walls:
+            return False
+        if add(box_pos, (2, 0)) in boxes:
+            if move_box2(add(box_pos, (2, 0)), dir, boxes, walls):
+                boxes.add(npos)
+                boxes.remove(box_pos)
+                return True
+            return False
+        boxes.add(npos)
+        boxes.remove(box_pos)
+        return True
+    elif dir == (-1, 0): # left
+        if npos in walls:
+            return False
+        if add(box_pos, (-2, 0)) in boxes:
+            if move_box2(add(box_pos, (-2, 0)), dir, boxes, walls):
+                boxes.add(npos)
+                boxes.remove(box_pos)
+                return True
+            return False
+        boxes.add(npos)
+        boxes.remove(box_pos)
+        return True
+    else: # up or down
+        if npos in walls or add(npos, (1, 0)) in walls:
+            return False
+        
+        intersectl = check_intersect(npos, boxes)
+        intersectr = check_intersect(add(npos, (1, 0)), boxes)
+        if intersectl and intersectr:
+            if intersectl != intersectr:
+                copy_boxes = boxes.copy()
+                if move_box2(intersectl, dir, copy_boxes, walls) and move_box2(intersectr, dir, copy_boxes, walls):
+                    boxes.clear()
+                    boxes |= copy_boxes
+                    boxes.add(npos)
+                    boxes.remove(box_pos)
+                    return True
+                return False
+            else:
+                if move_box2(intersectl, dir, boxes, walls):
+                    boxes.add(npos)
+                    boxes.remove(box_pos)
+                    return True
+                return False
+        elif intersectl:
+            if move_box2(intersectl, dir, boxes, walls):
+                boxes.add(npos)
+                boxes.remove(box_pos)
+                return True
+            return False
+        elif intersectr:
+            if move_box2(intersectr, dir, boxes, walls):
+                boxes.add(npos)
+                boxes.remove(box_pos)
+                return True
+            return False
+        else:
+            boxes.add(npos)
+            boxes.remove(box_pos)
+            return True
 
 
 def display1(w: int, h: int, boxes: set[tuple[int, int]], walls: set[tuple[int, int]], robot: tuple[int, int]):
@@ -49,6 +107,12 @@ def display2(w: int, h: int, boxes: set[tuple[int, int]], walls: set[tuple[int, 
                 line += '.'
         print(line)
 
+def check_intersect(pos, boxes):
+    if pos in boxes:
+        return pos
+    if add(pos, (-1, 0)) in boxes:
+        return add(pos, (-1, 0))
+    return None
 
 
 warehouse, moves = open(0).read().split("\n\n")
@@ -90,4 +154,14 @@ for move in moves:
 
 print(sum(100*pos[1] + pos[0] for pos in boxes1))
 
-display2(w, h, boxes2, walls2, robot2)
+for move in moves:
+    dir = dirs[move]
+    npos = add(robot2, dir)
+    intersect = check_intersect(npos, boxes2)
+    if intersect:
+        if move_box2(intersect, dir, boxes2, walls2):
+            robot2 = npos
+    elif npos not in walls2:
+        robot2 = npos
+
+print(sum(100*pos[1] + pos[0] for pos in boxes2))
