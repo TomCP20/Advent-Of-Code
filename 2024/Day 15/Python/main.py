@@ -1,18 +1,10 @@
 def move_box(box_pos: tuple[int, int], dir: tuple[int, int], boxes: set[tuple[int, int]], walls: set[tuple[int, int]]):
     npos = (box_pos[0] + dir[0], box_pos[1] + dir[1])
-    if npos in boxes:
-        if move_box(npos, dir, boxes, walls):
-            boxes.add(npos)
-            boxes.remove(box_pos)
-            return True
-        else:
-            return False
-    elif npos in walls:
+    if npos in walls or (npos in boxes and not move_box(npos, dir, boxes, walls)):
         return False
-    else:
-        boxes.add(npos)
-        boxes.remove(box_pos)
-        return True
+    boxes.add(npos)
+    boxes.remove(box_pos)
+    return True
 
 def display(w: int, h: int, boxes: set[tuple[int, int]], walls: set[tuple[int, int]], robot: tuple[int, int]):
     for y in range(h):
