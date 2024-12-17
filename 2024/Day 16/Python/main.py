@@ -15,13 +15,13 @@ def a_star(start: State, end: Vec, maze: list[str]):
     fScore = {start: h(start, end)}
 
     while openSet:
-        current = min(openSet, key=lambda x: fScore[x])
+        current = min(openSet, key=lambda x: fScore.get(x, float("inf")))
+        openSet.remove(current)
         if current[0] == end:
             return gScore[current]
-        openSet.remove(current)
         for neighbor, d in get_neighbors(current, maze):
             tentative_gScore = gScore[current] + d
-            if neighbor not in gScore or tentative_gScore < gScore[neighbor]:
+            if tentative_gScore < gScore.get(neighbor, float("inf")):
                 gScore[neighbor] = tentative_gScore
                 fScore[neighbor] = tentative_gScore + h(neighbor, end)
                 openSet.add(neighbor)
