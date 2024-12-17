@@ -1,15 +1,18 @@
-def add(a: tuple[int, int], b: tuple[int, int]):
+type Vec = tuple[int, int]
+type State = tuple[Vec, int]
+
+def add(a: Vec, b: Vec) -> Vec:
     return (a[0] + b[0], a[1] + b[1])
 
-def h(n: tuple[tuple[int, int], int], end: tuple[int, int]):
+def h(n: State, end: Vec):
     return abs(n[0][0] - end[0]) + abs(n[0][1] - end[1])
 
-def a_star(start: tuple[int, int], end: tuple[int, int], maze: list[str]):
-    openSet = {(start, 0)}
+def a_star(start: State, end: Vec, maze: list[str]):
+    openSet = {start}
 
-    gScore = {(start, 0): 0}
+    gScore = {start: 0}
 
-    fScore = {(start, 0): h((start, 0), end)}
+    fScore = {start: h(start, end)}
 
     while openSet:
         current = min(openSet, key=lambda x: fScore[x])
@@ -24,7 +27,7 @@ def a_star(start: tuple[int, int], end: tuple[int, int], maze: list[str]):
                 openSet.add(neighbor)
     return None
 
-def get_neighbors(n: tuple[tuple[int, int], int], maze: list[str]):
+def get_neighbors(n: State, maze: list[str]):
     pos, turns = n
     dir = dirs[turns]
     npos = add(pos, dir)
@@ -46,5 +49,5 @@ for y, line in enumerate(maze):
         elif c == "E":
             end = (x, y)
 
-dist = a_star(start, end, maze)
+dist = a_star((start, 0), end, maze)
 print(dist)
