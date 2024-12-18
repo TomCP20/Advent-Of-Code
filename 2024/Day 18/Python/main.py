@@ -7,7 +7,7 @@ def A_Star(size: int, corrupted: VecSet):
     def h(n: Vec):
         return 2*size - n[0] - n[1]
     def neighbors(n: Vec):
-        for dir in [(0,-1),(-1,0),(0,1),(1,0)]:
+        for dir in [(0,1),(1,0),(0,-1),(-1,0)]:
             new = (n[0] + dir[0], n[1] + dir[1])
             if (new not in corrupted) and 0 <= new[0] <= size and 0 <= new[1] <= size:
                 yield new
@@ -42,4 +42,4 @@ print(A_Star(size, set(all_corrupted[:bytes])))
 
 while A_Star(size, set(all_corrupted[:bytes])):
     bytes += 1
-print(f"{all_corrupted[bytes-1][0]}, {all_corrupted[bytes-1][0]}")
+print(f"{all_corrupted[bytes-1][0]},{all_corrupted[bytes-1][1]}")
