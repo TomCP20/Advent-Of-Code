@@ -27,6 +27,17 @@ def BFS(size: int, corrupted: VecSet) -> (int | None):
                 q.append(neighbor)
     return None
 
+def BinarySearch(all_corrupted: VecList, low: int, high: int):
+    while low <= high:
+        mid = (low + high) // 2
+        if (BFS(size, set(all_corrupted[:(mid+1)]))):
+            low = mid + 1
+        elif (low != mid):
+            high = mid
+        else:
+            return mid
+    assert False
+
 #size = 6
 #bytes = 12
 
@@ -36,6 +47,5 @@ bytes = 1024
 all_corrupted: VecList = [(int(line.split(",", 1)[0]), int(line.split(",", 1)[1])) for line in open(0).read().splitlines()]
 print(BFS(size, set(all_corrupted[:bytes])))
 
-while BFS(size, set(all_corrupted[:bytes])):
-    bytes += 1
-print(f"{all_corrupted[bytes-1][0]},{all_corrupted[bytes-1][1]}")
+s = BinarySearch(all_corrupted, bytes+1, len(all_corrupted)-1)
+print(f"{all_corrupted[s][0]},{all_corrupted[s][1]}")
