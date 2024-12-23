@@ -1,34 +1,24 @@
 from itertools import permutations
 
-neighbors: dict[str, set[str]] = {}
+N: dict[str, set[str]] = {}
 for a, b in (line.split("-") for line in open(0).read().splitlines()):
-    if a in neighbors:
-        neighbors[a].add(b)
+    if a in N:
+        N[a].add(b)
     else:
-        neighbors[a] = {b}
-    if b in neighbors:
-        neighbors[b].add(a)
+        N[a] = {b}
+    if b in N:
+        N[b].add(a)
     else:
-        neighbors[b] = {a}
+        N[b] = {a}
 
-res: set[frozenset[str]] = set()
-for computer in neighbors.keys():
-    if computer[0] == "t":
-        for a, b in permutations(neighbors[computer], 2):
-            if b in neighbors[a]:
-                res.add(frozenset({a, b, computer}))
-print(len(res))
+print(len({frozenset({a, b, t}) for t in N if t[0] == "t" for a, b in permutations(N[t], 2) if b in N[a]}))
 
 def BronKerbosch(R: set[str], P: set[str], X: set[str]):
     if not P and not X:
         yield R
     while P:
         v = P.pop()
-        yield from BronKerbosch( R | {v}, P & neighbors[v], X & neighbors[v] )
+        yield from BronKerbosch( R | {v}, P & N[v], X & N[v] )
         X |= {v}
 
-max_clique = set()
-for clique in BronKerbosch(set(), set(neighbors.keys()), set()):
-    if len(clique) > len(max_clique):
-        max_clique = clique
-print(",".join(sorted(list(max_clique))))
+print(",".join(sorted(max(BronKerbosch(set(), set(N), set()), key=len))))
