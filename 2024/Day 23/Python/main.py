@@ -1,33 +1,36 @@
 from itertools import permutations
 
-pairs = [set(line.split("-")) for line in open(0).read().splitlines()]
-computers = {c for pair in pairs for c in pair}
-tcomputers = {c for c in computers if c[0] == "t"}
-res = []
-for tcomputer in tcomputers:
-    tpairs = [p for p in pairs if tcomputer in p]
-    for a, b in permutations(tpairs, 2):
-        triple = (a | b)
-        if (triple - {tcomputer}) in pairs:
-            if triple not in res:
-                res.append(triple)
-print(len(res))
+pairs: set[frozenset[str]] = {frozenset(line.split("-")) for line in open(0).read().splitlines()}
+neighbors: dict[str, set[str]] = {}
+for pair in pairs:
+    a, b = list(pair)
+    if a in neighbors:
+        neighbors[a].add(b)
+    else:
+        neighbors[a] = {b}
+    if b in neighbors:
+        neighbors[b].add(a)
+    else:
+        neighbors[b] = {a}
 
-def getNeighbors(computer: str) -> set[str]:
-    npairs = [pair-{computer} for pair in pairs if computer in pair]
-    return {c for pair in npairs for c in pair}
+res: set[frozenset[str]] = set()
+for computer in neighbors.keys():
+    if computer[0] == "t":
+        for a, b in permutations(neighbors[computer], 2):
+            if frozenset({a, b}) in pairs:
+                res.add(frozenset({a, b, computer}))
+print(len(res))
 
 def BronKerbosch(R: set[str], P: set[str], X: set[str]):
     if not P and not X:
         yield R
     while P:
-        computer = P.pop()
-        neighbors = getNeighbors(computer)
-        yield from BronKerbosch( R | {computer}, P & neighbors, X & neighbors )
-        X |= {computer}
+        v = P.pop()
+        yield from BronKerbosch( R | {v}, P & neighbors[v], X & neighbors[v] )
+        X |= {v}
 
 max_clique = set()
-for clique in BronKerbosch(set(), computers, set()):
+for clique in BronKerbosch(set(), set(neighbors.keys()), set()):
     if len(clique) > len(max_clique):
         max_clique = clique
 print(",".join(sorted(list(max_clique))))
