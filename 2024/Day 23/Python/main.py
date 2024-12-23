@@ -1,9 +1,7 @@
 from itertools import permutations
 
-pairs: set[frozenset[str]] = {frozenset(line.split("-")) for line in open(0).read().splitlines()}
 neighbors: dict[str, set[str]] = {}
-for pair in pairs:
-    a, b = list(pair)
+for a, b in (line.split("-") for line in open(0).read().splitlines()):
     if a in neighbors:
         neighbors[a].add(b)
     else:
@@ -17,7 +15,7 @@ res: set[frozenset[str]] = set()
 for computer in neighbors.keys():
     if computer[0] == "t":
         for a, b in permutations(neighbors[computer], 2):
-            if frozenset({a, b}) in pairs:
+            if b in neighbors[a]:
                 res.add(frozenset({a, b, computer}))
 print(len(res))
 
