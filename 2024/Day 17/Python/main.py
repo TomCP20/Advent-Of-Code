@@ -1,49 +1,52 @@
-def execute(Reg_A, Reg_B, Reg_C, Program):
-    def Combo(operand):
+"""Advent of Code - 2024 - Day 17"""
+def execute(a, b, c, program):
+    """executes program"""
+    def combo(operand):
         if 0 <= operand <= 3:
             return operand
-        elif operand == 4:
-            return Reg_A
-        elif operand == 5:
-            return Reg_B
-        elif operand == 6:
-            return Reg_C
+        if operand == 4:
+            return a
+        if operand == 5:
+            return b
+        if operand == 6:
+            return c
         print(f"Invalid operand: {operand}")
         return 0
 
     pointer = 0
-    out = []
-    while pointer < len(Program)-1:
-        opcode = Program[pointer]
-        operand = Program[pointer + 1]
+    output = []
+    while pointer < len(program)-1:
+        opcode = program[pointer]
+        operand = program[pointer + 1]
         skip = False
 
         if opcode == 0: #adv
-            Reg_A = Reg_A >> Combo(operand)
+            a = a >> combo(operand)
         elif opcode == 1: #bxl
-            Reg_B = Reg_B ^ operand
+            b = b ^ operand
         elif opcode == 2: #bst
-            Reg_B = Combo(operand) % 8
+            b = combo(operand) % 8
         elif opcode == 3: #jnz
-            if Reg_A != 0:
+            if a != 0:
                 pointer = operand
                 skip = True
         elif opcode == 4: #bxc
-            Reg_B = Reg_B ^ Reg_C
+            b = b ^ c
         elif opcode == 5: #out
-            out.append(Combo(operand) % 8)
+            output.append(combo(operand) % 8)
         elif opcode == 6: #bdv
-            Reg_B = Reg_A >> Combo(operand)
+            b = a >> combo(operand)
         elif opcode == 7: #cdv
-            Reg_C = Reg_A >> Combo(operand)
+            c = a >> combo(operand)
         else:
             print(f"Invalid opcode: {opcode}")
 
         if not skip:
             pointer += 2
-    return out
+    return output
 
-lines = open(0).read().splitlines()
+with open(0, encoding="utf-8") as f:
+    lines = f.read().splitlines()
 
 Reg_A = int(lines[0][12:])
 Reg_B = int(lines[1][12:])
@@ -51,23 +54,22 @@ Reg_C = int(lines[2][12:])
 
 Program = list(map(int, lines[4][9:].split(",")))
 
-out = execute(Reg_A, Reg_B, Reg_C, Program)
-
-print(",".join(map(str, out)))
+print(",".join(map(str, execute(Reg_A, Reg_B, Reg_C, Program))))
 
 
 
 l = len(Program) -1
 
-def DFS(n, candidate):
+def dfs(n, candidate):
+    """depth first search"""
     if n == l+1:
         yield candidate
     else:
         for i in range(8):
-            A = candidate | (i << (3*(l-n)))
-            if A != 0:
-                out = execute(A, Reg_B, Reg_C, Program)
+            a = candidate | (i << (3*(l-n)))
+            if a != 0:
+                out = execute(a, Reg_B, Reg_C, Program)
                 if out[l-n] == Program[l-n]:
-                    yield from DFS(n+1, A)
+                    yield from dfs(n+1, a)
 
-print(DFS(0, 0).__next__())
+print(dfs(0, 0).__next__())

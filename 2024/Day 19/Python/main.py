@@ -1,14 +1,16 @@
+"""Advent of Code - 2024 - Day 19"""
 import re
 
 cols = "wubrg"
 
 class Trie:
+    """class representing the node of a Trie"""
     def __init__(self) -> None:
         self.end: bool = False
         self.children: list[None | Trie] = [None]*len(cols)
 
-
-    def insertTowl(self, towl: str) -> None:
+    def insert_towl(self, towl: str) -> None:
+        """inserts a towl into the Trie"""
         prev = self
         for col in towl[::-1]:
             index = cols.index(col)
@@ -18,7 +20,8 @@ class Trie:
             assert prev
         prev.end = True
 
-    def waysOfFormingDesign(self, design: str) -> int:
+    def ways_of_forming_design(self, design: str) -> int:
+        """returns the number of ways of forming the design"""
         n = len(design)
         count = [0]*n
         for i in range(n):
@@ -37,15 +40,16 @@ class Trie:
                         count[i] += 1
         return count[-1]
 
-lines = open(0).read().splitlines()
+with open(0, encoding="utf-8") as f:
+    lines = f.read().splitlines()
 towls = lines[0].split(", ")
 designs = lines[2:]
-pattren = "(" + "|".join(towls) + ")+"
+pattren: str = "(" + "|".join(towls) + ")+"
 possible_designs = [d for d in designs if re.fullmatch(pattren, d)]
 print(len(possible_designs))
 
 root = Trie()
-for towl in towls:
-    root.insertTowl(towl)
+for t in towls:
+    root.insert_towl(t)
 
-print(sum(root.waysOfFormingDesign(design) for design in possible_designs))
+print(sum(root.ways_of_forming_design(design) for design in possible_designs))
