@@ -1,37 +1,41 @@
+"""Advent of Code - 2024 - Day 22"""
 from collections import Counter, deque
 
-def step(n: int) -> int:
-    n = ((n*64)^n)%16777216
-    n = ((n//32)^n)%16777216
-    n = ((n*2048)^n)%16777216
-    return n
+def step(secret_num: int) -> int:
+    """steps the secret number"""
+    secret_num = ((secret_num*64)^secret_num)%16777216
+    secret_num = ((secret_num//32)^secret_num)%16777216
+    secret_num = ((secret_num*2048)^secret_num)%16777216
+    return secret_num
 
-def step2000(n: int) -> int:
+def step2000(secret_num: int) -> int:
+    """applies step 2000 times"""
     for _ in range(2000):
-        n = step(n)
-    return n
+        secret_num = step(secret_num)
+    return secret_num
 
 
-def sequenceToPrice(n: int) -> Counter[tuple[int, ...]]:
-    slice: deque[int] = deque([], maxlen=4)
+def sequence_to_price(secret_num: int) -> Counter[tuple[int, ...]]:
+    """gets price from sequence"""
+    q_slice: deque[int] = deque([], maxlen=4)
     prices = Counter()
 
     for i in range(2000):
         if i >= 4:
-            key = tuple(slice)
+            key = tuple(q_slice)
             if key not in prices:
-                prices[key] = n % 10
+                prices[key] = secret_num % 10
 
-        next = step(n)
-        slice.append((next%10)-(n%10))
-        n = next
+        next_val = step(secret_num)
+        q_slice.append((next_val%10)-(secret_num%10))
+        secret_num = next_val
 
     return prices
-
-initial = list(map(int, open(0).read().splitlines()))
+with open(0, encoding="utf-8") as f:
+    initial = list(map(int, f.read().splitlines()))
 print(sum(step2000(n) for n in initial))
 
 all_prices = Counter()
 for n in initial:
-    all_prices += sequenceToPrice(n)
+    all_prices += sequence_to_price(n)
 print(all_prices.most_common(1)[0][1])

@@ -1,17 +1,24 @@
+"""Advent of Code - 2024 - Day 23"""
 from itertools import permutations
 from collections import defaultdict
 
-def BronKerbosch(N: dict[str, set[str]], R: set[str], P: set[str], X: set[str]):
-    if not P and not X:
-        yield R
-    while P:
-        v = P.pop()
-        yield from BronKerbosch(N, R | {v}, P & N[v], X & N[v])
-        X.add(v)
+def bron_kerbosch(n: dict[str, set[str]], r: set[str], p: set[str], x: set[str]):
+    """Bron-Kerbosch algorithm"""
+    if not p and not x:
+        yield r
+    while p:
+        v = p.pop()
+        yield from bron_kerbosch(n, r | {v}, p & n[v], x & n[v])
+        x.add(v)
 
-N: dict[str, set[str]] = defaultdict(set)
-for a, b in (line.split("-") for line in open(0).read().splitlines()):
-    N[a].add(b)
-    N[b].add(a)
-print(len({frozenset({a, b, t}) for t in N if t[0] == "t" for a, b in permutations(N[t], 2) if b in N[a]}))
-print(",".join(sorted(max(BronKerbosch(N, set(), set(N), set()), key=len))))
+connections: dict[str, set[str]] = defaultdict(set)
+with open(0, encoding="utf-8") as f:
+    for a, b in (line.split("-") for line in f.read().splitlines()):
+        connections[a].add(b)
+        connections[b].add(a)
+t_computers = (t for t in connections if t[0] == "t")
+def pairs(t: str):
+    """returns all 2 permutations of ts neighbors"""
+    return permutations(connections[t], 2)
+print(len({frozenset({a, b, t}) for t in t_computers for a, b in pairs(t) if b in connections[a]}))
+print(",".join(sorted(max(bron_kerbosch(connections, set(), set(connections), set()), key=len))))

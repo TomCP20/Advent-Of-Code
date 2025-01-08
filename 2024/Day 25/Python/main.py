@@ -1,7 +1,8 @@
+"""Advent of Code - 2024 - Day 25"""
 from itertools import product
-
-schematics = list(map(lambda x : x.splitlines(), open(0).read().split("\n\n")))
-locks = [[[line[x] for line in lock].count("#") for x in range(5)] for lock in schematics if lock[0] == "#####"]
-keys = [[[line[x] for line in key].count("#") for x in range(5)] for key in schematics if key[0] == "....."]
+with open(0, encoding="utf-8") as f:
+    schematics = list(map(lambda x : x.splitlines(), f.read().split("\n\n")))
+locks = [[[r[x] for r in l].count("#") for x in range(5)] for l in schematics if l[0] == "#####"]
+keys = [[[r[x] for r in k].count("#") for x in range(5)] for k in schematics if k[0] == "....."]
 
 print(sum(all(((k + l) <= 7) for (k, l) in zip(key, lock)) for key, lock in product(keys, locks)))
