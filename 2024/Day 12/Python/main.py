@@ -1,24 +1,27 @@
-def get_seed(h, w, checked):
+"""Advent of Code - 2024 - Day 12"""
+
+def get_seed():
+    """returns the first seed not in checked"""
     for y in range(h):
         for x in range(w):
             if (x, y) not in checked:
                 return (x, y)
     print("error checked full")
     return (-1, -1)
-
-lines = open(0).read().splitlines()
+with open(0, encoding="utf-8") as f:
+    lines = f.read().splitlines()
 w = len(lines[0])
 h = len(lines)
 checked = set()
-price1 = 0
-price2 = 0
+price1: int = 0
+price2: int = 0
 while len(checked) < w * h:
-    seed = get_seed(h, w, checked)
+    seed = get_seed()
     q = [seed]
     val = lines[seed[1]][seed[0]]
     region = set()
-    perimiter = 0
-    corners = 0
+    perimiter: int = 0
+    corners: int = 0
     while q:
         n = q.pop()
         if n not in region:
@@ -72,7 +75,7 @@ while len(checked) < w * h:
                     if lines[n[1]+1][n[0]-1] != val:
                         corners += 1
             elif neighbors == 3:
-                corners += 0 #TODO
+                corners += 0
                 if not up:
                     if lines[n[1]+1][n[0]+1] != val:
                         corners += 1
@@ -103,7 +106,7 @@ while len(checked) < w * h:
                 if lines[n[1]+1][n[0]-1] != val:
                     corners += 1
 
-    area = len(region)
+    area: int = len(region)
     price1 += area * perimiter
     price2 += area * corners
 
