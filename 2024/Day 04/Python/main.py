@@ -1,18 +1,27 @@
+"""Advent of Code - 2024 - Day 4"""
 import re
 
-input = open(0).read()
-row = len(input.splitlines()[0]) + 6
-padded_input = "".join("..." + line + "..." for line in input.splitlines())
+def part1(r: int, word_search: str) -> int:
+    """day 4 part 1"""
+    count = 0
+    for o in map(str, [0, r, r-1, r-2]):
+        pattern = "(?=(X.{"+o+"}M.{"+o+"}A.{"+o+"}S|S.{"+o+"}A.{"+o+"}M.{"+o+"}X))"
+        count += len(re.findall(pattern, word_search))
+    return count
 
-count1 = 0
-for o in map(str, [0, row, row-1, row-2]):
-    pattern1 = r"(?=(X.{" + o + r"}M.{" + o + r"}A.{" + o + r"}S|S.{" + o + r"}A.{" + o + r"}M.{" + o + r"}X))"
-    count1 += len(re.findall(pattern1, padded_input))
-print(count1)
+def part2(n: str, word_search: str) -> int:
+    """day 4 part 2"""
+    count = 0
+    for perm in ["MMSS", "MSMS", "SMSM", "SSMM"]:
+        pattern = "(?=("+perm[0]+"."+perm[1]+".{"+n+"}A.{"+n+"}"+perm[2]+"."+perm[3]+"))"
+        count += len(re.findall(pattern, word_search))
+    return count
 
-count2 = 0
-n = str(row-2)
-for perm in ["MMSS", "MSMS", "SMSM", "SSMM"]:
-    pattern2 = r"(?=(" + perm[0] + r"." + perm[1] + r".{" + n + r"}A.{" + n + r"}" + perm[2] + r"." + perm[3] + r"))"
-    count2 += len(re.findall(pattern2, padded_input))
-print(count2)
+with open(0, encoding="utf-8") as f:
+    lines = f.read().splitlines()
+    row = len(lines[0]) + 6
+    PADDED_INPUT = "".join("..." + line + "..." for line in lines)
+
+
+print(part1(row, PADDED_INPUT))
+print(part2(str(row-2), PADDED_INPUT))

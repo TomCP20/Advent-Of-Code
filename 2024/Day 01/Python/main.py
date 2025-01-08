@@ -1,7 +1,8 @@
+"""Advent of Code - 2024 - Day 1"""
 from collections import Counter
 
-input = open(0).read().splitlines()
-lists = [line.split("   ") for line in input]
+with open(0, encoding="utf-8") as f:
+    lists = [line.split("   ") for line in f.read().splitlines()]
 left = [int(line[0]) for line in lists]
 right = [int(line[1]) for line in lists]
 
