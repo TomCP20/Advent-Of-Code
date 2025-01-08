@@ -1,10 +1,13 @@
-def get_trailheads(topo_map: list[list[int]], w: int, h: int):
+"""Advent of Code - 2024 - Day 10"""
+def get_trailheads():
+    """yields all trailheads on the map"""
     for y in range(h):
         for x in range(w):
             if topo_map[y][x] == 0:
                 yield (x, y)
 
-def get_neighbors(x: int, y: int, w: int, h: int):
+def get_neighbors(x: int, y: int):
+    """yields all von Neumann neighbors"""
     if y < h-1:
         yield (x, y+1)
     if y > 0:
@@ -14,18 +17,20 @@ def get_neighbors(x: int, y: int, w: int, h: int):
     if x > 0:
         yield (x-1, y)
 
-def DFS(topo_map: list[list[int]], x: int, y: int, w: int, h: int):
+def dfs(x: int, y: int):
+    """Depth First Search"""
     val = topo_map[y][x]
     if val == 9:
         yield (x, y)
     else:
-        for (nx, ny) in get_neighbors(x, y, w, h):
+        for (nx, ny) in get_neighbors(x, y):
             if topo_map[ny][nx] == val+1:
-                yield from DFS(topo_map, nx, ny, w, h)
+                yield from dfs(nx, ny)
 
-topo_map = [list(map(int, line)) for line in open(0).read().splitlines()]
+with open(0, encoding="utf-8") as f:
+    topo_map = [list(map(int, line)) for line in f.read().splitlines()]
 w = len(topo_map[0])
 h = len(topo_map)
 
-print(sum(len(set(DFS(topo_map, x, y, w, h))) for (x, y) in get_trailheads(topo_map, w, h)))
-print(sum(len(list(DFS(topo_map, x, y, w, h))) for (x, y) in get_trailheads(topo_map, w, h)))
+print(sum(len(set(dfs(x, y))) for (x, y) in get_trailheads()))
+print(sum(len(list(dfs(x, y))) for (x, y) in get_trailheads()))

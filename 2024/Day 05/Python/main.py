@@ -1,8 +1,10 @@
+"""Advent of Code - 2024 - Day 5"""
 from functools import cmp_to_key
 
-def getCmp(rules: list[list[int]]):
+def get_cmp(page_rules: list[list[int]]):
+    """returns a comparison function based on the page rules"""
     def cmp(a: int, b: int):
-        for (l, r) in rules:
+        for (l, r) in page_rules:
             if a == l and b == r:
                 return 1
             if b == l and a == r:
@@ -10,20 +12,19 @@ def getCmp(rules: list[list[int]]):
         return 0
     return cmp
 
-input = open(0).read()
-a, b = input.split("\n\n", 1)
+with open(0, encoding="utf-8") as f:
+    rules, updates = f.read().split("\n\n", 1)
+rules = [list(map(int, rule.split("|"))) for rule in rules.splitlines()]
+updates = [list(map(int, update.split(","))) for update in updates.splitlines()]
 
-rules = [list(map(int, rule.split("|"))) for rule in a.splitlines()]
-updates = [list(map(int, update.split(","))) for update in b.splitlines()]
-
-sum1 = 0
-sum2 = 0
-for update in updates:
-    mid = int((len(update) - 1)/2)
-    if all(not (l in update and r in update and not (update.index(l) < update.index(r))) for (l,r) in rules):
-        sum1 += update[mid]
+sum1: int = 0
+sum2: int = 0
+for u in updates:
+    mid = len(u)//2
+    if not any(l in u and r in u and u.index(l) >= u.index(r) for (l,r) in rules):
+        sum1 += u[mid]
     else:
-        update.sort(key=cmp_to_key(getCmp(rules)))
-        sum2 += update[mid]
+        u.sort(key=cmp_to_key(get_cmp(rules)))
+        sum2 += u[mid]
 print(sum1)
 print(sum2)

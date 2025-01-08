@@ -1,11 +1,12 @@
+"""Advent of Code - 2024 - Day 8"""
 from itertools import permutations
 
 antennas = {}
-
-input = open(0).read().splitlines()
-height = len(input)
-width = len(input[0])
-for y, line in enumerate(input):
+with open(0, encoding="utf-8") as f:
+    city_map = f.read().splitlines()
+height = len(city_map)
+width = len(city_map[0])
+for y, line in enumerate(city_map):
     for x, char in enumerate(line):
         if char != ".":
             if char in antennas:
