@@ -1,5 +1,4 @@
 """Advent of Code - 2024 - Day 9"""
-from itertools import groupby
 
 def part1(disk: list[int|None]):
     """Day 9 Part 1"""
@@ -19,14 +18,23 @@ def part1(disk: list[int|None]):
 def part2(disk: list[int|None], max_id: int):
     """Day 9 Part 1"""
     for file_id in range(max_id, -1, -1):
-        size = disk.count(file_id)
-        start = disk.index(file_id)
-        for val, l in groupby(enumerate(disk), key=lambda x : x[1]):
-            if val is None:
-                group = list(l)
-                if len(group) >= size and start > group[0][0]:
-                    for i in range(size):
-                        disk[group[i][0]], disk[start+i] = disk[start+i], None
+        file_size = disk.count(file_id)
+        file_start = disk.index(file_id)
+        space_size = 0
+        space_start = None
+        for i in range(file_start):
+            if disk[i] is not None:
+                space_size = 0
+                space_start = None
+            else:
+                space_size +=1
+                if space_start is None:
+                    space_start = i
+                if space_size >= file_size:
+                    for j in range(file_size):
+                        disk[space_start+j], disk[file_start+j] = disk[file_start+j], None
+                    break
+
     return sum(i*n for i, n in enumerate(disk) if n is not None)
 
 with open(0, encoding="utf-8") as f:
