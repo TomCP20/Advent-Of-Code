@@ -16,7 +16,7 @@ def part1(disk: list[int|None]):
 
     return sum(i*n for i, n in enumerate(disk) if n is not None)
 
-def part2(disk: list[int|None]):
+def part2(disk: list[int|None], max_id: int):
     """Day 9 Part 1"""
     for file_id in range(max_id, -1, -1):
         size = disk.count(file_id)
@@ -30,15 +30,13 @@ def part2(disk: list[int|None]):
     return sum(i*n for i, n in enumerate(disk) if n is not None)
 
 with open(0, encoding="utf-8") as f:
-    og_disk: list[int|None] = []
-    max_id: int = 0
-    for index, n in enumerate(map(int, f.readline())):
-        if index % 2 == 0:
-            og_disk += n*[index//2]
-            max_id = index//2
-        else:
-            og_disk+= n*[None]
+    line = f.readline()
+og_disk: list[int|None] = []
+for index, n in enumerate(map(int, line)):
+    if index % 2 == 0:
+        og_disk += n*[index//2]
+    else:
+        og_disk+= n*[None]
 
 print(part1(og_disk.copy()))
-
-print(part2(og_disk.copy()))
+print(part2(og_disk.copy(), (len(line)-1)//2))
