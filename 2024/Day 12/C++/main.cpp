@@ -102,51 +102,51 @@ int main(int argc, char *argv[])
                     if (up && left)
                     {
                         corners++;
-                        corners += (lines[y - 1][x - 1] != val);
+                        corners += lines[y - 1][x - 1] != val;
                     }
                     else if (up && right)
                     {
                         corners++;
-                        corners += (lines[y - 1][x + 1] != val);
+                        corners += lines[y - 1][x + 1] != val;
                     }
                     else if (down && right)
                     {
                         corners++;
-                        corners += (lines[y + 1][x + 1] != val);
+                        corners += lines[y + 1][x + 1] != val;
                     }
                     else if (down && left)
                     {
                         corners++;
-                        corners += (lines[y + 1][x - 1] != val);
+                        corners += lines[y + 1][x - 1] != val;
                     }
                     break;
                 case 3:
                     if (!up)
                     {
-                        corners += (lines[y + 1][x + 1] != val);
-                        corners += (lines[y + 1][x - 1] != val);
+                        corners += lines[y + 1][x + 1] != val;
+                        corners += lines[y + 1][x - 1] != val;
                     }
                     else if (!down)
                     {
-                        corners += (lines[y - 1][x + 1] != val);
-                        corners += (lines[y - 1][x - 1] != val);
+                        corners += lines[y - 1][x + 1] != val;
+                        corners += lines[y - 1][x - 1] != val;
                     }
                     else if (!left)
                     {
-                        corners += (lines[y - 1][x + 1] != val);
-                        corners += (lines[y + 1][x + 1] != val);
+                        corners += lines[y - 1][x + 1] != val;
+                        corners += lines[y + 1][x + 1] != val;
                     }
                     else if (!right)
                     {
-                        corners += (lines[y - 1][x - 1] != val);
-                        corners += (lines[y + 1][x - 1] != val);
+                        corners += lines[y - 1][x - 1] != val;
+                        corners += lines[y + 1][x - 1] != val;
                     }
                     break;
                 case 4:
-                    corners += (lines[y - 1][x - 1] != val);
-                    corners += (lines[y - 1][x + 1] != val);
-                    corners += (lines[y + 1][x + 1] != val);
-                    corners += (lines[y + 1][x - 1] != val);
+                    corners += lines[y - 1][x - 1] != val;
+                    corners += lines[y - 1][x + 1] != val;
+                    corners += lines[y + 1][x + 1] != val;
+                    corners += lines[y + 1][x - 1] != val;
                     break;
                 default:
                     break;
