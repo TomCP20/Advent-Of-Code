@@ -19,7 +19,7 @@ while len(checked) < w * h:
     seed = get_seed()
     q = [seed]
     val = lines[seed[1]][seed[0]]
-    region = set()
+    region: set[tuple[int, int] ]= set()
     perimiter: int = 0
     corners: int = 0
     while q:
@@ -51,7 +51,7 @@ while len(checked) < w * h:
                 q.append(south)
             else:
                 perimiter += 1
-            
+
             neighbors = left + right + up + down
             if neighbors == 0:
                 corners += 4
@@ -60,51 +60,34 @@ while len(checked) < w * h:
             elif neighbors == 2:
                 if up and left:
                     corners += 1
-                    if lines[n[1]-1][n[0]-1] != val:
-                        corners += 1
+                    corners += lines[n[1]-1][n[0]-1] != val
                 elif up and right:
                     corners += 1
-                    if lines[n[1]-1][n[0]+1] != val:
-                        corners += 1
+                    corners += lines[n[1]-1][n[0]+1] != val
                 elif down and right:
                     corners += 1
-                    if lines[n[1]+1][n[0]+1] != val:
-                        corners += 1
+                    corners += lines[n[1]+1][n[0]+1] != val
                 elif down and left:
                     corners += 1
-                    if lines[n[1]+1][n[0]-1] != val:
-                        corners += 1
+                    corners += lines[n[1]+1][n[0]-1] != val
             elif neighbors == 3:
-                corners += 0
                 if not up:
-                    if lines[n[1]+1][n[0]+1] != val:
-                        corners += 1
-                    if lines[n[1]+1][n[0]-1] != val:
-                        corners += 1
+                    corners += lines[n[1]+1][n[0]+1] != val
+                    corners += lines[n[1]+1][n[0]-1] != val
                 elif not down:
-                    if lines[n[1]-1][n[0]-1] != val:
-                        corners += 1
-                    if lines[n[1]-1][n[0]+1] != val:
-                        corners += 1
+                    corners += lines[n[1]-1][n[0]-1] != val
+                    corners += lines[n[1]-1][n[0]+1] != val
                 elif not left:
-                    if lines[n[1]-1][n[0]+1] != val:
-                        corners += 1
-                    if lines[n[1]+1][n[0]+1] != val:
-                        corners += 1
+                    corners += lines[n[1]-1][n[0]+1] != val
+                    corners += lines[n[1]+1][n[0]+1] != val
                 elif not right:
-                    if lines[n[1]-1][n[0]-1] != val:
-                        corners += 1
-                    if lines[n[1]+1][n[0]-1] != val:
-                        corners += 1
+                    corners += lines[n[1]-1][n[0]-1] != val
+                    corners += lines[n[1]+1][n[0]-1] != val
             elif neighbors == 4:
-                if lines[n[1]-1][n[0]-1] != val:
-                    corners += 1
-                if lines[n[1]-1][n[0]+1] != val:
-                    corners += 1
-                if lines[n[1]+1][n[0]+1] != val:
-                    corners += 1
-                if lines[n[1]+1][n[0]-1] != val:
-                    corners += 1
+                corners += lines[n[1]-1][n[0]-1] != val
+                corners += lines[n[1]-1][n[0]+1] != val
+                corners += lines[n[1]+1][n[0]+1] != val
+                corners += lines[n[1]+1][n[0]-1] != val
 
     area: int = len(region)
     price1 += area * perimiter
