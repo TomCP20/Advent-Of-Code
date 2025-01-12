@@ -10,7 +10,7 @@ long long checksum(std::vector<int> &disk)
     long long s = 0;
     for (int i = 0; i < disk.size(); i++)
     {
-        
+
         if (disk[i] != EMPTY)
         {
             s += i * disk[i];
@@ -22,7 +22,7 @@ long long checksum(std::vector<int> &disk)
 long long part1(std::vector<int> disk)
 {
     int l = 0;
-    int r = disk.size()-1;
+    int r = disk.size() - 1;
     while (l < r)
     {
         if (disk[r] == EMPTY)
@@ -68,15 +68,15 @@ long long part2(std::vector<int> disk, int max_id)
                 {
                     for (int j = 0; j < file_size; j++)
                     {
-                        disk[space_start+j] = disk[file_start+j];
-                        disk[file_start+j] = EMPTY;
+                        disk[space_start + j] = disk[file_start + j];
+                        disk[file_start + j] = EMPTY;
                     }
                     break;
                 }
             }
         }
     }
-    
+
     return checksum(disk);
 }
 
@@ -87,12 +87,12 @@ int main(int argc, char *argv[])
     std::vector<int> disk;
     for (int i = 0; i < line.size(); i++)
     {
-        int v = i % 2 == 0 ? i/2 : EMPTY;
+        int v = i % 2 == 0 ? i / 2 : EMPTY;
         for (int j = 0; j < line[i] - '0'; j++)
         {
             disk.push_back(v);
         }
     }
     std::cout << part1(disk) << "\n";
-    std::cout << part2(disk, (line.size()-1)/2) << "\n";
+    std::cout << part2(disk, (line.size() - 1) / 2) << "\n";
 }

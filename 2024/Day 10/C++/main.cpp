@@ -41,23 +41,23 @@ int main(int argc, char *argv[])
                     if (val == 9)
                     {
                         path_count++;
-                        unique_paths.insert(px+py*w);
+                        unique_paths.insert(px + py * w);
                     }
-                    if (py < h-1 && map[py+1][px] == val+1)
+                    if (py < h - 1 && map[py + 1][px] == val + 1)
                     {
-                        S.push(std::make_pair(px, py+1));
+                        S.push(std::make_pair(px, py + 1));
                     }
-                    if (py > 0 && map[py-1][px] == val+1)
+                    if (py > 0 && map[py - 1][px] == val + 1)
                     {
-                        S.push(std::make_pair(px, py-1));
+                        S.push(std::make_pair(px, py - 1));
                     }
-                    if (px < w-1 && map[py][px+1] == val+1)
+                    if (px < w - 1 && map[py][px + 1] == val + 1)
                     {
-                        S.push(std::make_pair(px+1, py));
+                        S.push(std::make_pair(px + 1, py));
                     }
-                    if (px > 0 && map[py][px-1] == val+1)
+                    if (px > 0 && map[py][px - 1] == val + 1)
                     {
-                        S.push(std::make_pair(px-1, py));
+                        S.push(std::make_pair(px - 1, py));
                     }
                 }
                 unique_path_count += unique_paths.size();

@@ -4,7 +4,7 @@
 #include <vector>
 #include <map>
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
     std::regex const regex = std::regex("^(\\d+)   (\\d+)$");
     std::smatch match;
@@ -23,17 +23,17 @@ int main(int argc, char* argv[])
         }
     }
 
-    std::sort (left.begin(), left.end());
-    std::sort (right.begin(), right.end());
+    std::sort(left.begin(), left.end());
+    std::sort(right.begin(), right.end());
     int result1 = 0;
     for (size_t i = 0; i < left.size(); i++)
     {
         result1 += abs(left[i] - right[i]);
     }
-    std::cout << result1 <<std::endl;
-    
+    std::cout << result1 << std::endl;
+
     std::map<int, int> count;
-    for (const int& r : right)
+    for (const int &r : right)
     {
         if (count.find(r) == count.end())
         {
@@ -45,13 +45,13 @@ int main(int argc, char* argv[])
         }
     }
     int result2 = 0;
-    for (const int& l : left)
+    for (const int &l : left)
     {
         if (count.find(l) != count.end())
         {
-            result2 += l*count[l];
+            result2 += l * count[l];
         }
     }
-    std::cout << result2 <<std::endl;
+    std::cout << result2 << std::endl;
     return 0;
 }

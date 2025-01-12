@@ -12,21 +12,19 @@ struct input_data
 
     input_data(unsigned long long stone, int blinks, int max_blinks) : stone(stone), blinks(blinks), max_blinks(max_blinks) {}
 
-    bool operator==(const input_data& other) const
+    bool operator==(const input_data &other) const
     {
         return stone == other.stone && blinks == other.blinks && max_blinks == other.max_blinks;
     }
-
 };
 
 struct input_data_hasher
 {
-    size_t operator()(const input_data& p) const
+    size_t operator()(const input_data &p) const
     {
         return (std::hash<unsigned long long>()(p.stone) << 14) ^ (std::hash<int>()(p.blinks) << 7) ^ (std::hash<int>()(p.max_blinks));
     }
 };
-
 
 unsigned long long num_stones(input_data i)
 {
@@ -51,15 +49,14 @@ unsigned long long num_stones(input_data i)
     unsigned long long digits = (unsigned long long)(log10(i.stone)) + 1;
     if (digits % 2 == 0)
     {
-        unsigned long long a = i.stone / (unsigned long long)std::pow(10, ((digits/2)));
-        unsigned long long b = i.stone % (unsigned long long)std::pow(10, ((digits/2)));
+        unsigned long long a = i.stone / (unsigned long long)std::pow(10, ((digits / 2)));
+        unsigned long long b = i.stone % (unsigned long long)std::pow(10, ((digits / 2)));
         cache[i] = num_stones(input_data(a, i.blinks + 1, i.max_blinks)) + num_stones(input_data(b, i.blinks + 1, i.max_blinks));
         return cache[i];
     }
     cache[i] = num_stones(input_data(i.stone * 2024, i.blinks + 1, i.max_blinks));
     return cache[i];
 }
-
 
 int main(int argc, char *argv[])
 {
