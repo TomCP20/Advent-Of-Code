@@ -33,10 +33,7 @@ with open(0, encoding="utf-8") as f:
     line = f.readline()
 og_disk: list[int|None] = []
 for index, n in enumerate(map(int, line)):
-    if index % 2 == 0:
-        og_disk += n*[index//2]
-    else:
-        og_disk+= n*[None]
+    og_disk += n*[index//2 if index % 2 == 0 else None]
 
 print(part1(og_disk.copy()))
 print(part2(og_disk.copy(), (len(line)-1)//2))
