@@ -34,8 +34,8 @@ with open(0, encoding="utf-8") as f:
     max_id: int = 0
     for index, n in enumerate(map(int, f.readline())):
         if index % 2 == 0:
-            og_disk += n*[int(index/2)]
-            max_id = int(index/2)
+            og_disk += n*[index//2]
+            max_id = index//2
         else:
             og_disk+= n*[None]
 
