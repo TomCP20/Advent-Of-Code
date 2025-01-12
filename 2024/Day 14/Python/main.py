@@ -24,13 +24,11 @@ W = 101
 H = 103
 
 PATTERN = r"p=(-?\d+),(-?\d+) v=(-?\d+),(-?\d+)"
-with open(0, encoding="utf-8") as f:
-    lines = f.read().splitlines()
 drones = []
-for line in lines:
-    m = re.match(PATTERN, line)
-    if m:
-        drones.append(tuple(map(int, m.groups())))
+with open(0, encoding="utf-8") as f:
+    for line in f.read().splitlines():
+        if m := re.match(PATTERN, line):
+            drones.append(tuple(map(int, m.groups())))
 
 MX = (W-1)//2
 MY = (H-1)//2
