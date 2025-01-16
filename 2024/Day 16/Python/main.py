@@ -14,7 +14,7 @@ def dijkstra(start_state: State, goal: Vec):
     q: list[tuple[int, State]] = []
     dist_map = {start_state: 0}
     heappush(q, (0, start_state))
-    prev: dict[State, set[State]] = dict()
+    prev: dict[State, set[State]] = {}
 
     while q:
         _, current = heappop(q)
@@ -30,7 +30,6 @@ def dijkstra(start_state: State, goal: Vec):
                 heappush(q, (alt, neighbor))
             elif alt == dist_map.get(neighbor, float("inf")):
                 prev[neighbor].add(current)
-    
 
     def get_path(state: State):
         if state[0] == start_state[0]:
@@ -46,15 +45,13 @@ def dijkstra(start_state: State, goal: Vec):
 def get_neighbors(n: State):
     """gets neighbors of n"""
     pos, turns = n
-    direction = dirs[turns]
+    direction = [(1, 0), (0, 1), (-1, 0), (0, -1)][turns]
     npos = add(pos, direction)
     if maze[npos[1]][npos[0]] != '#':
         yield ((npos, turns), 1)
     yield ((pos, (turns + 1)%4), 1000)
     yield ((pos, (turns - 1)%4), 1000)
 
-
-dirs = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 with open(0, encoding="utf-8") as f:
     maze = f.read().splitlines()
 start = (-1, -1)
