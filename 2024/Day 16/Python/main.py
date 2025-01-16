@@ -31,15 +31,17 @@ def dijkstra(start_state: State, goal: Vec):
             elif alt == dist_map.get(neighbor, float("inf")):
                 prev[neighbor].add(current)
 
-    def get_path(state: State):
-        if state[0] == start_state[0]:
-            yield [state]
-            return
-        for prev_state in prev[state]:
-            for path in get_path(prev_state):
-                yield path + [state]
+    return dist_map[current], len(dfs(prev, current))
 
-    return dist_map[current], get_path(current)
+def dfs(prev, current):
+    """Depth First Search to find all unique positions"""
+    s = [current]
+    tiles: set[Vec] = set()
+    while s:
+        v = s.pop()
+        tiles.add(v[0])
+        s.extend(p for p in prev[v] if p in prev)
+    return tiles
 
 
 def get_neighbors(n: State):
@@ -63,7 +65,6 @@ for y, line in enumerate(maze):
         elif c == "E":
             end = (x, y)
 
-dist, paths = dijkstra((start, 0), end)
-
+dist, unique_tiles = dijkstra((start, 0), end)
 print(dist)
-print(len({state[0] for path in paths for state in path}))
+print(unique_tiles)
