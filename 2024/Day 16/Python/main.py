@@ -12,16 +12,14 @@ def add(a: Vec, b: Vec) -> Vec:
 def dijkstra(start_state: State, goal: Vec):
     """dijkstra's algorithm"""
     q: list[tuple[int, State]] = []
-    dist_map = {start_state: 0}
     heappush(q, (0, start_state))
+    dist_map = {start_state: 0}
     prev: dict[State, set[State]] = {}
 
     while q:
         _, current = heappop(q)
-
         if current[0] == goal:
             break
-
         for neighbor, d in get_neighbors(current):
             alt = dist_map[current] + d
             if alt < dist_map.get(neighbor, float("inf")):
