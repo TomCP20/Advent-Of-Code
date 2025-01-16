@@ -92,9 +92,6 @@ with open(0, encoding="utf-8") as f:
     warehouse, moves = f.read().split("\n\n")
 moves: str = "".join(moves.splitlines())
 warehouse = warehouse.splitlines()
-w = len(warehouse[0])
-h = len(warehouse)
-
 
 walls1 = set()
 boxes1 = set()
@@ -119,7 +116,7 @@ for y, line in enumerate(warehouse):
 dirs = {'^': (0, -1), 'v': (0, 1), '<': (-1, 0), '>': (1, 0)}
 for move in moves:
     direction = dirs[move]
-    npos = (robot1[0] + direction[0], robot1[1] + direction[1])
+    npos = add(robot1, direction)
     if npos in boxes1:
         if move_box1(npos, direction, boxes1, walls1):
             robot1 = npos
