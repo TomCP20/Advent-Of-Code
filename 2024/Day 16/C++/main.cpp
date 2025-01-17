@@ -6,6 +6,7 @@
 #include <functional>
 #include <limits>
 #include <algorithm>
+#include <stack>
 
 using Vec = std::pair<int, int>;
 using State = std::pair<Vec, int>;
@@ -41,7 +42,25 @@ std::vector<std::pair<State, int>> get_neighbors(State n, std::vector<std::strin
     return out;
 }
 
-int dijkstra(State start_state, Vec goal, std::vector<std::string> maze)
+int dfs(State current, std::unordered_map<State, std::unordered_set<State>> prev)
+{
+    std::stack<State> s;
+    s.push(current);
+    std::unordered_set<Vec> tiles;
+    while (!s.empty())
+    {
+        State v = s.top();
+        s.pop();
+        tiles.insert(v.first);
+        for (State p : prev[v])
+        {
+            s.push(p);
+        }
+    }
+    return tiles.size();    
+}
+
+std::pair<int, int> dijkstra(State start_state, Vec goal, std::vector<std::string> maze)
 {
     auto comp = [](QState a, QState b)
     { return a.first > b.first; };
@@ -76,7 +95,7 @@ int dijkstra(State start_state, Vec goal, std::vector<std::string> maze)
         }
     }
     
-    return dist_map[current];
+    return {dist_map[current], dfs(current, prev)};
 }
 
 int main(int argc, char *argv[])
@@ -102,5 +121,6 @@ int main(int argc, char *argv[])
         y++;
         maze.push_back(line);
     }
-    std::cout << dijkstra({start, 0}, end, maze) << "\n";
+    auto [dist, unique_tiles] = dijkstra({start, 0}, end, maze);
+    std::cout << dist << "\n" << unique_tiles << "\n";
 }
