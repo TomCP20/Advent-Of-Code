@@ -1,6 +1,6 @@
 """Advent of Code - 2024 - Day 16"""
 from heapq import heappop, heappush
-
+from typing import Iterator
 
 type Vec = tuple[int, int]
 type State = tuple[Vec, int]
@@ -9,7 +9,7 @@ def add(a: Vec, b: Vec) -> Vec:
     """adds 2 vecs"""
     return (a[0] + b[0], a[1] + b[1])
 
-def dijkstra(start_state: State, goal: Vec):
+def dijkstra(start_state: State, goal: Vec) -> tuple[int, int]:
     """dijkstra's algorithm"""
     q: list[tuple[int, State]] = []
     heappush(q, (0, start_state))
@@ -31,7 +31,7 @@ def dijkstra(start_state: State, goal: Vec):
 
     return dist_map[current], len(dfs(prev, current))
 
-def dfs(prev, current):
+def dfs(prev: dict[State, set[State]], current: State) -> set[Vec]:
     """Depth First Search to find all unique positions"""
     s = [current]
     tiles: set[Vec] = set()
@@ -42,7 +42,7 @@ def dfs(prev, current):
     return tiles
 
 
-def get_neighbors(n: State):
+def get_neighbors(n: State) -> Iterator[tuple[tuple[Vec, int], int]]:
     """gets neighbors of n"""
     pos, turns = n
     direction = [(1, 0), (0, 1), (-1, 0), (0, -1)][turns]
