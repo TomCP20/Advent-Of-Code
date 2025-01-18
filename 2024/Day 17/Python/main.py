@@ -1,7 +1,7 @@
 """Advent of Code - 2024 - Day 17"""
-def execute(a, b, c, program):
+def execute(a: int, b: int, c: int, program: list[int]):
     """executes program"""
-    def combo(operand):
+    def combo(operand: int):
         if 0 <= operand <= 3:
             return operand
         if operand == 4:
@@ -14,7 +14,7 @@ def execute(a, b, c, program):
         return 0
 
     pointer = 0
-    output = []
+    output: list[int] = []
     while pointer < len(program)-1:
         opcode = program[pointer]
         operand = program[pointer + 1]
@@ -56,11 +56,9 @@ Program = list(map(int, lines[4][9:].split(",")))
 
 print(",".join(map(str, execute(Reg_A, Reg_B, Reg_C, Program))))
 
-
-
 l = len(Program) -1
 
-def dfs(n, candidate):
+def dfs(n: int, candidate: int):
     """depth first search"""
     if n == l+1:
         yield candidate
