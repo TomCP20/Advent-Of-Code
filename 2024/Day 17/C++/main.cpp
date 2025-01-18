@@ -2,8 +2,9 @@
 #include <string>
 #include <regex>
 #include <stack>
+#include <bitset>
 
-long combo(long a, long b, long c, int operand)
+unsigned long long combo(unsigned long long a, unsigned long long b, unsigned long long c, unsigned long long operand)
 {
     if (0 <= operand && operand <= 3)
     {
@@ -25,14 +26,14 @@ long combo(long a, long b, long c, int operand)
     return 0;
 }
 
-std::vector<long> execute(long a, long b, long c, std::vector<int> program)
+std::vector<unsigned long long> execute(unsigned long long a, unsigned long long b, unsigned long long c, std::vector<unsigned long long> program)
 {
-    int pointer = 0;
-    std::vector<long> output;
+    unsigned long long pointer = 0;
+    std::vector<unsigned long long> output;
     while (pointer < program.size() - 1)
     {
-        int opcode = program[pointer];
-        int operand = program[pointer + 1];
+        unsigned long long opcode = program[pointer];
+        unsigned long long operand = program[pointer + 1];
         bool skip = false;
         switch (opcode)
         {
@@ -78,25 +79,38 @@ std::vector<long> execute(long a, long b, long c, std::vector<int> program)
     return output;
 }
 
-long dfs(long b, long c, std::vector<int> program)
+void print_output(std::vector<unsigned long long> output)
 {
-    int l = program.size() - 1;
-    std::stack<std::pair<int, long>> s;
+    std::cout << output[0];
+    for (int i = 1; i < output.size(); i++)
+    {
+        std::cout << "," << output[i];
+    }
+    std::cout << "\n";
+}
+
+unsigned long long dfs(unsigned long long b, unsigned long long c, std::vector<unsigned long long> program)
+{
+    const int l = 16 - 1; // length of program minus 1
+    const int size = 48;
+    std::stack<std::pair<int, std::bitset<size>>> s;
     s.push({0, 0});
     while (!s.empty())
     {
         auto [n, candidate] = s.top();
         s.pop();
-        if (n == l + 1)
+        if (n > l)
         {
-            return candidate;
+            return candidate.to_ullong();
         }
-        for (int i = 0; i < 8; i++)
+        for (int i = 8; i >= 0; i--)
         {
-            long a = candidate | (i << (3 * l - n));
-            if (a != 0)
+            std::bitset<size> shift (i);
+            shift = shift << (3 * (l-n));
+            std::bitset<size> a = (candidate | shift);
+            if (a.any())
             {
-                std::vector<long> out = execute(a, b, c, program);
+                std::vector<unsigned long long> out = execute(a.to_ullong(), b, c, program);
                 if (out[l - n] == program[l - n])
                 {
                     s.push({n + 1, a});
@@ -104,6 +118,8 @@ long dfs(long b, long c, std::vector<int> program)
             }
         }
     }
+    std::cout << "error\n";
+    return -1;
 }
 
 int main(int argc, char *argv[])
@@ -117,20 +133,15 @@ int main(int argc, char *argv[])
     std::regex r("Register A: (\\d+)Register B: (\\d+)Register C: (\\d+)Program: (\\d(,\\d)*)");
     std::smatch m;
     std::regex_match(s, m, r);
-    int a = std::stoi(m[1]);
-    int b = std::stoi(m[2]);
-    int c = std::stoi(m[3]);
+    unsigned long long a = std::stoi(m[1]);
+    unsigned long long b = std::stoi(m[2]);
+    unsigned long long c = std::stoi(m[3]);
     std::string nums = m[4];
-    std::vector<int> program;
+    std::vector<unsigned long long> program;
     for (int i = 0; i < nums.length(); i += 2)
     {
         program.push_back((int)(nums[i]) - '0');
     }
-    std::vector<long> output = execute(a, b, c, program);
-    std::cout << output[0];
-    for (int i = 1; i < output.size(); i++)
-    {
-        std::cout << "," << output[i];
-    }
-    std::cout << "\n";
+    print_output(execute(a, b, c, program));
+    std::cout << dfs(b, c, program) << "\n";
 }
