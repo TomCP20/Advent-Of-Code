@@ -37,15 +37,9 @@ def get_key_seq(
     xdiff = topos[0] - frompos[0]
     ydiff = topos[1] - frompos[1]
     if xdiff == 0:  # on the same column
-        if ydiff > 0:  # going down
-            return [ydiff * "v"]
-        # going up
-        return [abs(ydiff) * "^"]
+        return [ydiff * "v"] if ydiff > 0 else [abs(ydiff) * "^"]
     if ydiff == 0:  # on the same row
-        if xdiff > 0:  # going right
-            return [xdiff * ">"]
-        # going left
-        return [abs(xdiff) * "<"]
+        return [xdiff * ">"] if xdiff > 0 else [abs(xdiff) * "<"]
     if ydiff < 0 < xdiff:  # up right
         if not isnum and frompos[0] == 0 and topos[1] == 0:
             return [xdiff * ">" + abs(ydiff) * "^"]
@@ -62,7 +56,6 @@ def get_key_seq(
     if isnum and topos[0] == 0 and frompos[1] == 3:
         return [abs(ydiff) * "^" + abs(xdiff) * "<"]
     return [abs(ydiff) * "^" + abs(xdiff) * "<", abs(xdiff) * "<" + abs(ydiff) * "^"]
-
 
 numkeymap: dict[str, list[str]] = {
     fromkey + tokey: get_key_seq(fromkey, tokey, numkeypos, True)
