@@ -46,11 +46,11 @@ def get_key_seq(
             return [xdiff * ">"]
         # going left
         return [abs(xdiff) * "<"]
-    if ydiff < 0 and xdiff > 0:  # up right
+    if ydiff < 0 < xdiff:  # up right
         if not isnum and frompos[0] == 0 and topos[1] == 0:
             return [xdiff * ">" + abs(ydiff) * "^"]
         return [abs(ydiff) * "^" + xdiff * ">", xdiff * ">" + abs(ydiff) * "^"]
-    if ydiff > 0 and xdiff < 0:  # down left
+    if ydiff > 0 > xdiff:  # down left
         if not isnum and frompos[1] == 0 and topos[0] == 0:
             return [ydiff * "v" + abs(xdiff) * "<"]
         return [ydiff * "v" + abs(xdiff) * "<", abs(xdiff) * "<" + ydiff * "v"]
