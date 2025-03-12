@@ -18,7 +18,7 @@ def step2000(secret_num: int) -> int:
 def sequence_to_price(secret_num: int) -> Counter[tuple[int, ...]]:
     """gets price from sequence"""
     q_slice: deque[int] = deque([], maxlen=4)
-    prices = Counter()
+    prices: Counter[tuple[int, ...]] = Counter()
 
     for i in range(2000):
         if i >= 4:
@@ -35,7 +35,7 @@ with open(0, encoding="utf-8") as f:
     initial = list(map(int, f.read().splitlines()))
 print(sum(step2000(n) for n in initial))
 
-all_prices = Counter()
+all_prices: Counter[tuple[int, ...]] = Counter()
 for n in initial:
     all_prices += sequence_to_price(n)
 print(all_prices.most_common(1)[0][1])
