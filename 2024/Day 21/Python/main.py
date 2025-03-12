@@ -97,7 +97,7 @@ def shortest_seq(keys: str, depth: int):
     return total
 
 
-def solve(depth: int):
+def solve(codes: list[str], depth: int):
     """solves the puzzle"""
     total = 0
     for code in codes:
@@ -107,8 +107,12 @@ def solve(depth: int):
     return total
 
 
-with open(0, encoding="utf-8") as f:
-    codes = f.read().splitlines()
+def main():
+    """solves part 1 and 2"""
+    with open(0, encoding="utf-8") as f:
+        codes = f.read().splitlines()
 
-print(solve(2))
-print(solve(25))
+    print(solve(codes, 2))
+    print(solve(codes, 25))
+
+main()
