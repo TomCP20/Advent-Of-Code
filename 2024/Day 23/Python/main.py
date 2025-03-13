@@ -1,6 +1,6 @@
 """Advent of Code - 2024 - Day 23"""
 
-from itertools import permutations
+from itertools import combinations
 from collections import defaultdict
 from typing import Iterable
 
@@ -24,18 +24,12 @@ with open(0, encoding="utf-8") as f:
         connections[b].add(a)
 t_computers = (t for t in connections if t[0] == "t")
 
-
-def pairs(t: str):
-    """returns all 2 permutations of ts neighbors"""
-    return permutations(connections[t], 2)
-
-
 print(
     len(
         {
             frozenset({a, b, t})
             for t in t_computers
-            for a, b in pairs(t)
+            for a, b in combinations(connections[t], 2)
             if b in connections[a]
         }
     )
