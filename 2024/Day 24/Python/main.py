@@ -4,7 +4,7 @@ import re
 with open(0, encoding="utf-8") as f:
     p, q = f.read().split("\n\n")
 reg = {line[:3]:int(line[5:]) for line in p.splitlines()}
-gates: dict[str, tuple[str, ...]] = {}
+gates: dict[str, tuple[str, str, str]] = {}
 for line in q.splitlines():
     m = re.fullmatch("(...) (AND|OR|XOR) (...) -> (...)", line)
     if m:
