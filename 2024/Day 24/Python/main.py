@@ -1,15 +1,17 @@
 """Advent of Code - 2024 - Day 24"""
+
 import re
 
 with open(0, encoding="utf-8") as f:
     p, q = f.read().split("\n\n")
-reg = {line[:3]:int(line[5:]) for line in p.splitlines()}
+reg = {line[:3]: int(line[5:]) for line in p.splitlines()}
 gates: dict[str, tuple[str, str, str]] = {}
 for line in q.splitlines():
     m = re.fullmatch("(...) (AND|OR|XOR) (...) -> (...)", line)
     if m:
         (a, op, b, c) = m.groups()
         gates[c] = (a, b, op)
+
 
 def get_val(name: str) -> int:
     """get value of gate"""
@@ -24,13 +26,17 @@ def get_val(name: str) -> int:
         return val1 | val2
     return val1 ^ val2
 
-zgates: list[str] = [gate for gate in sorted(gates, reverse=True) if gate[0] == "z"]
+
+zgates: list[str] = sorted(filter(lambda gate: gate[0] == "z", gates), reverse=True)
+
+
 def solve():
     """solve"""
-    num=0
+    num = 0
     for operand in zgates:
         num = (num << 1) + get_val(operand)
     return num
+
 
 num1 = solve()
 print(num1)
@@ -41,17 +47,19 @@ for gate, (a, b, op) in gates.items():
     if gate in zgates[1:] and op != "XOR":
         rule1.append(gate)
     if gate not in zgates:
-        if a[0] != "x" and a[0] != "y" and b[0] != "x" and b[0] != "y" and op =="XOR":
+        if a[0] != "x" and a[0] != "y" and b[0] != "x" and b[0] != "y" and op == "XOR":
             rule2.append(gate)
+
 
 def get_swap(name: str) -> str:
     """gets the swap"""
     if name[0] == "z":
         return f"z{int(name[1:])-1:02d}"
     for out, (l, r, _) in gates.items():
-        if name  in (l, r):
+        if name in (l, r):
             return get_swap(out)
     assert False
+
 
 for rule in rule2:
     swap = get_swap(rule)
@@ -70,7 +78,7 @@ for op in sorted(reg, reverse=True):
         ynum = (ynum << 1) + reg[op]
 
 truenum = xnum + ynum
-trailing = ((num2 ^ truenum) & -(num2 ^ truenum)).bit_length() -1
+trailing = ((num2 ^ truenum) & -(num2 ^ truenum)).bit_length() - 1
 
 badgates = rule1 + rule2
 
