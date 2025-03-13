@@ -5,7 +5,10 @@
 #include <regex>
 #include <vector>
 
-bool get_val(const std::unordered_map<std::string, bool> &reg, const std::unordered_map<std::string, std::tuple<std::string, std::string, std::string>> &gates, const std::string &name)
+using REG = std::unordered_map<std::string, bool>;
+using GATES = std::unordered_map<std::string, std::tuple<std::string, std::string, std::string>>;
+
+bool get_val(const REG &reg, const GATES &gates, const std::string &name)
 {
     if (reg.find(name) != reg.end())
     {
@@ -28,7 +31,7 @@ bool get_val(const std::unordered_map<std::string, bool> &reg, const std::unorde
     }    
 }
 
-long long solve(const std::unordered_map<std::string, bool> &reg, const std::unordered_map<std::string, std::tuple<std::string, std::string, std::string>> &gates, const std::vector<std::string> &zgates)
+long long solve(const REG &reg, const GATES &gates, const std::vector<std::string> &zgates)
 {
     long long num = 0;
     for (auto &gate : zgates)
@@ -42,7 +45,7 @@ int main(int argc, char *argv[])
 {
     std::string line;
 
-    std::unordered_map<std::string, bool> reg;
+    REG reg;
     while (std::getline(std::cin, line))
     {
         if (line == "")
@@ -52,7 +55,7 @@ int main(int argc, char *argv[])
         reg[line.substr(0, 3)] = line.substr(5, 1) == "1";
     }
 
-    std::unordered_map<std::string, std::tuple<std::string, std::string, std::string>> gates;
+    GATES gates;
     std::regex r("(...) (AND|OR|XOR) (...) -> (...)");
     while (std::getline(std::cin, line))
     {
