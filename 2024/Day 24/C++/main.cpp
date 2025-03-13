@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
         {
             break;
         }
-        reg[line.substr(0, 3)] = stoi(line.substr(5, 1));
+        reg[line.substr(0, 3)] = line.substr(5, 1) == "1";
     }
 
     std::unordered_map<std::string, std::tuple<std::string, std::string, std::string>> gates;
