@@ -35,8 +35,8 @@ def solve():
 num1 = solve()
 print(num1)
 
-rule1 = []
-rule2 = []
+rule1: list[str] = []
+rule2: list[str] = []
 for gate, (a, b, op) in gates.items():
     if gate in zgates[1:] and op != "XOR":
         rule1.append(gate)
@@ -44,12 +44,12 @@ for gate, (a, b, op) in gates.items():
         if a[0] != "x" and a[0] != "y" and b[0] != "x" and b[0] != "y" and op =="XOR":
             rule2.append(gate)
 
-def get_swap(name: str):
+def get_swap(name: str) -> str:
     """gets the swap"""
     if name[0] == "z":
         return f"z{int(name[1:])-1:02d}"
     for out, (l, r, _) in gates.items():
-        if name == l or name == r:
+        if name  in (l, r):
             return get_swap(out)
     assert False
 
