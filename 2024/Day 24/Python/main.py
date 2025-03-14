@@ -60,11 +60,11 @@ def get_truenum(reg: REG):
     """calculates the true result"""
     xnum: int = 0
     ynum: int = 0
-    for op in sorted(reg, reverse=True):
-        if op[0] == "x":
-            xnum = (xnum << 1) + reg[op]
-        if op[0] == "y":
-            ynum = (ynum << 1) + reg[op]
+    for name in sorted(reg, reverse=True):
+        if name[0] == "x":
+            xnum = (xnum << 1) + reg[name]
+        if name[0] == "y":
+            ynum = (ynum << 1) + reg[name]
     truenum = xnum + ynum
     return truenum
 
