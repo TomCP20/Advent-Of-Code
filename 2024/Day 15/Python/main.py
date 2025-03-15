@@ -80,7 +80,7 @@ def move_box2(box_pos: Vec, d: Vec, boxes: set[Vec], walls: set[Vec]):
     boxes.remove(box_pos)
     return True
 
-def check_intersect(pos, boxes):
+def check_intersect(pos: Vec, boxes: set[Vec]):
     """checks if pos intersects with a box"""
     if pos in boxes:
         return pos
@@ -93,11 +93,11 @@ with open(0, encoding="utf-8") as f:
 moves: str = "".join(moves.splitlines())
 warehouse = warehouse.splitlines()
 
-walls1 = set()
-boxes1 = set()
+walls1: set[Vec] = set()
+boxes1: set[Vec] = set()
 robot1 = (-1, -1)
-walls2 = set()
-boxes2 = set()
+walls2: set[Vec] = set()
+boxes2: set[Vec] = set()
 robot2 = (-1, -1)
 
 for y, line in enumerate(warehouse):

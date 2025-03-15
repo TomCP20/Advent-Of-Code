@@ -12,7 +12,7 @@ with open(0, encoding="utf-8") as f:
     lines = f.read().splitlines()
 w = len(lines[0])
 h = len(lines)
-checked = set()
+checked: set[tuple[int, int]] = set()
 price1: int = 0
 price2: int = 0
 while len(checked) < w * h:

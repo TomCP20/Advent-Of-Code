@@ -55,6 +55,8 @@ if __name__ == '__main__':
                     i_state = ((x, y), 2)
                 case "<":
                     i_state = ((x, y), 3)
+                case _:
+                    pass
 
     print((len({ pos for (pos, _) in traverse(i_state, i_obstacles, w, h) })))
     loops: int = 0

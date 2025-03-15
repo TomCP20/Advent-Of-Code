@@ -1,4 +1,7 @@
 """Advent of Code - 2024 - Day 17"""
+from typing import Iterator
+
+
 def execute(a: int, b: int, c: int, program: list[int]):
     """executes program"""
     def combo(operand: int):
@@ -58,7 +61,7 @@ print(",".join(map(str, execute(Reg_A, Reg_B, Reg_C, Program))))
 
 l = len(Program) -1
 
-def dfs(n: int, candidate: int):
+def dfs(n: int, candidate: int) -> Iterator[int]:
     """depth first search"""
     if n == l+1:
         yield candidate

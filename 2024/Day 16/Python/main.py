@@ -15,7 +15,7 @@ def dijkstra(start_state: State, goal: Vec) -> tuple[int, int]:
     heappush(q, (0, start_state))
     dist_map = {start_state: 0}
     prev: dict[State, set[State]] = {}
-
+    current = None
     while q:
         _, current = heappop(q)
         if current[0] == goal:
@@ -28,7 +28,7 @@ def dijkstra(start_state: State, goal: Vec) -> tuple[int, int]:
                 heappush(q, (alt, neighbor))
             elif alt == dist_map.get(neighbor, float("inf")):
                 prev[neighbor].add(current)
-
+    assert current
     return dist_map[current], len(dfs(prev, current))
 
 def dfs(prev: dict[State, set[State]], current: State) -> set[Vec]:

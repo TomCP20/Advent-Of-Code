@@ -22,10 +22,7 @@ def num_stones(stone: int, blinks: int, max_blinks: int) -> int:
     x = process_stone(stone)
     if isinstance(x, tuple):
         return num_stones(x[0], blinks + 1, max_blinks) + num_stones(x[1], blinks + 1, max_blinks)
-    if isinstance(x, int):
-        return num_stones(x, blinks + 1, max_blinks)
-    print(f"error: x is type {type(x)}")
-    return 0
+    return num_stones(x, blinks + 1, max_blinks)
 
 with open(0, encoding="utf-8") as f:
     stones = list(map(int, f.read().split()))

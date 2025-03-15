@@ -1,4 +1,7 @@
 """Advent of Code - 2024 - Day 10"""
+from typing import Iterable
+
+
 def get_trailheads():
     """yields all trailheads on the map"""
     for y in range(h):
@@ -17,7 +20,7 @@ def get_neighbors(x: int, y: int):
     if x > 0:
         yield (x-1, y)
 
-def dfs(x: int, y: int):
+def dfs(x: int, y: int) -> Iterable[tuple[int, int]]:
     """Depth First Search"""
     val = topo_map[y][x]
     if val == 9:
