@@ -26,50 +26,46 @@ dirkeypos = {
 }
 
 
-def get_key_seq(
-    fromkey: str, tokey: str, keypos: dict[str, tuple[int, int]], isnum: bool
-):
+def get_key_seq(frompos: tuple[int, int], topos: tuple[int, int], isnum: bool):
     """gets the sequence for the key"""
-    frompos = keypos[fromkey]
-    topos = keypos[tokey]
-    up = abs(topos[1] - frompos[1]) * "^"
-    down = abs(topos[1] - frompos[1]) * "v"
-    left = abs(topos[0] - frompos[0]) * "<"
-    right = abs(topos[0] - frompos[0]) * ">"
-    match (topos[0] - frompos[0], topos[1] - frompos[1]):
-        case (0, 0):
-            return [""]
-        case (0, ydiff):
-            return [down] if ydiff > 0 else [up]
-        case (xdiff, 0):
-            return [right] if xdiff > 0 else [left]
-        case (xdiff, ydiff):
-            match (xdiff > 0, ydiff > 0):
-                case (True, True):  # down right
-                    if isnum and frompos[0] == 0 and topos[1] == 3:
-                        return [right + down]
-                    return [down + right, right + down]
-                case (True, False):  # up right
-                    if not isnum and frompos[0] == 0 and topos[1] == 0:
-                        return [right + up]
-                    return [up + right, right + up]
-                case (False, True):  # down left
-                    if not isnum and frompos[1] == 0 and topos[0] == 0:
-                        return [down + left]
-                    return [down + left, left + down]
-                case (False, False):
-                    if isnum and topos[0] == 0 and frompos[1] == 3:
-                        return [up + left]
-                    return [up + left, left + up]
+    if frompos == topos:
+        return [""]
+    xdiff = topos[0] - frompos[0]
+    ydiff = topos[1] - frompos[1]
+    up = abs(ydiff) * "^"
+    down = abs(ydiff) * "v"
+    left = abs(xdiff) * "<"
+    right = abs(xdiff) * ">"
+    if xdiff == 0:
+        return [down] if ydiff > 0 else [up]
+    if ydiff == 0:
+        return [right] if xdiff > 0 else [left]
+    match (xdiff > 0, ydiff > 0):
+        case (True, True):  # down right
+            if isnum and frompos[0] == 0 and topos[1] == 3:
+                return [right + down]
+            return [down + right, right + down]
+        case (True, False):  # up right
+            if not isnum and frompos[0] == 0 and topos[1] == 0:
+                return [right + up]
+            return [up + right, right + up]
+        case (False, True):  # down left
+            if not isnum and frompos[1] == 0 and topos[0] == 0:
+                return [down + left]
+            return [down + left, left + down]
+        case (False, False):  # up left
+            if isnum and topos[0] == 0 and frompos[1] == 3:
+                return [up + left]
+            return [up + left, left + up]
 
 
 numkeymap: dict[str, list[str]] = {
-    fromkey + tokey: get_key_seq(fromkey, tokey, numkeypos, True)
-    for fromkey, tokey in product(numkeypos.keys(), repeat=2)
+    fromkey + tokey: get_key_seq(frompos, topos, True)
+    for (fromkey, frompos), (tokey, topos) in product(numkeypos.items(), repeat=2)
 }
 dirkeymap: dict[str, list[str]] = {
-    fromkey + tokey: get_key_seq(fromkey, tokey, dirkeypos, False)
-    for fromkey, tokey in product(dirkeypos.keys(), repeat=2)
+    fromkey + tokey: get_key_seq(frompos, topos, False)
+    for (fromkey, frompos), (tokey, topos) in product(dirkeypos.items(), repeat=2)
 }
 
 
