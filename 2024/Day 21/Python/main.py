@@ -32,31 +32,33 @@ def get_key_seq(
     """gets the sequence for the key"""
     frompos = keypos[fromkey]
     topos = keypos[tokey]
-    xdiff = topos[0] - frompos[0]
-    ydiff = topos[1] - frompos[1]
+    up = abs(topos[1] - frompos[1]) * "^"
+    down = abs(topos[1] - frompos[1]) * "v"
+    left = abs(topos[0] - frompos[0]) * "<"
+    right = abs(topos[0] - frompos[0]) * ">"
     match (topos[0] - frompos[0], topos[1] - frompos[1]):
         case (0, 0):
             return [""]
         case (0, ydiff):
-            return [ydiff * "v"] if ydiff > 0 else [abs(ydiff) * "^"]
+            return [down] if ydiff > 0 else [up]
         case (xdiff, 0):
-            return [xdiff * ">"] if xdiff > 0 else [abs(xdiff) * "<"]
+            return [right] if xdiff > 0 else [left]
         case (xdiff, ydiff) if ydiff < 0 < xdiff:  # up right
             if not isnum and frompos[0] == 0 and topos[1] == 0:
-                return [xdiff * ">" + abs(ydiff) * "^"]
-            return [abs(ydiff) * "^" + xdiff * ">", xdiff * ">" + abs(ydiff) * "^"]
+                return [right + up]
+            return [up + right, right + up]
         case (xdiff, ydiff) if ydiff > 0 > xdiff:  # down left
             if not isnum and frompos[1] == 0 and topos[0] == 0:
-                return [ydiff * "v" + abs(xdiff) * "<"]
-            return [ydiff * "v" + abs(xdiff) * "<", abs(xdiff) * "<" + ydiff * "v"]
+                return [down + left]
+            return [down + left, left + down]
         case (xdiff, ydiff) if ydiff > 0 and xdiff > 0:  # down right
             if isnum and frompos[0] == 0 and topos[1] == 3:
-                return [xdiff * ">" + ydiff * "v"]
-            return [ydiff * "v" + xdiff * ">", xdiff * ">" + ydiff * "v"]
+                return [right + down]
+            return [down + right, right + down]
         case (xdiff, ydiff) if ydiff < 0 and xdiff < 0:  # up left
             if isnum and topos[0] == 0 and frompos[1] == 3:
-                return [abs(ydiff) * "^" + abs(xdiff) * "<"]
-            return [abs(ydiff) * "^" + abs(xdiff) * "<", abs(xdiff) * "<" + abs(ydiff) * "^"]
+                return [up + left]
+            return [up + left, left + up]
         case _:
             assert False
 
