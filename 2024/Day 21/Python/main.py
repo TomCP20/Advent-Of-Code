@@ -43,24 +43,24 @@ def get_key_seq(
             return [down] if ydiff > 0 else [up]
         case (xdiff, 0):
             return [right] if xdiff > 0 else [left]
-        case (xdiff, ydiff) if ydiff < 0 < xdiff:  # up right
-            if not isnum and frompos[0] == 0 and topos[1] == 0:
-                return [right + up]
-            return [up + right, right + up]
-        case (xdiff, ydiff) if ydiff > 0 > xdiff:  # down left
-            if not isnum and frompos[1] == 0 and topos[0] == 0:
-                return [down + left]
-            return [down + left, left + down]
-        case (xdiff, ydiff) if ydiff > 0 and xdiff > 0:  # down right
-            if isnum and frompos[0] == 0 and topos[1] == 3:
-                return [right + down]
-            return [down + right, right + down]
-        case (xdiff, ydiff) if ydiff < 0 and xdiff < 0:  # up left
-            if isnum and topos[0] == 0 and frompos[1] == 3:
-                return [up + left]
-            return [up + left, left + up]
-        case _:
-            assert False
+        case (xdiff, ydiff):
+            match (xdiff > 0, ydiff > 0):
+                case (True, True):  # down right
+                    if isnum and frompos[0] == 0 and topos[1] == 3:
+                        return [right + down]
+                    return [down + right, right + down]
+                case (True, False):  # up right
+                    if not isnum and frompos[0] == 0 and topos[1] == 0:
+                        return [right + up]
+                    return [up + right, right + up]
+                case (False, True):  # down left
+                    if not isnum and frompos[1] == 0 and topos[0] == 0:
+                        return [down + left]
+                    return [down + left, left + down]
+                case (False, False):
+                    if isnum and topos[0] == 0 and frompos[1] == 3:
+                        return [up + left]
+                    return [up + left, left + up]
 
 
 numkeymap: dict[str, list[str]] = {
