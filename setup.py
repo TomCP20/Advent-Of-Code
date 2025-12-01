@@ -21,6 +21,7 @@ def makefile(directory: str, name: str):
 
 for i in range(1, DAYS+1):
     day_path = os.path.join(dirname, str(YEAR), f"Day {i:02d}")
+    os.makedirs(day_path)
     if INPUTS:
         makefile(day_path, "test.txt")
         makefile(day_path, "input.txt")
