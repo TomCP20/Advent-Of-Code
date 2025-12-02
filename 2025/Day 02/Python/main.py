@@ -4,26 +4,13 @@ import re
 
 def get_range(r: str):
     """create a range based on the string r"""
-    start = int(r[:r.find("-")])
-    end = int(r[r.find("-")+1:])
-    return range(start, end+1)
+    i = r.find("-")
+    return range(int(r[:i]), int(r[i+1:])+1)
 
-def is_invalid_1(id_str: str) -> bool:
-    """Checks if the id is valid based on part 1 rules"""
-    return id_str[:len(id_str)//2] == id_str[len(id_str)//2:]
-
-def part_1(ids: list[int]):
+def solve(ids: list[int], part: int):
     """Solves Part 1 of Day 2"""
-    return sum(int(id) for id in ids if is_invalid_1(str(id)))
-
-def is_invalid_2(id_str: str) -> bool:
-    """Checks if the id is valid based on part 2 rules"""
-    return bool(re.match(r"^(.+)\1+$", id_str))
-
-def part_2(ids: list[int]):
-    """Solves Part 2 of Day 2"""
-    return sum(int(id) for id in ids if is_invalid_2(str(id)))
-
+    pattern = r"^(.+)\1$" if part == 1 else r"^(.+)\1+$"
+    return sum(id_int for id_int in ids if re.match(pattern, str(id_int)))
 
 def main():
     """Solves Part 1 and 2 of Day 2"""
@@ -31,7 +18,7 @@ def main():
         line = "".join(f.read().splitlines())
     ranges = (get_range(r) for r in line.split(","))
     ids = [id_int for r in ranges for id_int in r]
-    print(part_1(ids))
-    print(part_2(ids))
+    print(solve(ids, 1))
+    print(solve(ids, 2))
 
 main()
