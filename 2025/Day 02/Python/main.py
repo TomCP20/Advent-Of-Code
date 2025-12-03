@@ -8,7 +8,7 @@ def get_range(r: str):
     return range(int(r[:i]), int(r[i+1:])+1)
 
 def solve(ids: list[int], part: int):
-    """Solves Part 1 of Day 2"""
+    """Solves Part 1 or 2 of Day 2"""
     pattern = r"^(.+)\1$" if part == 1 else r"^(.+)\1+$"
     return sum(id_int for id_int in ids if re.match(pattern, str(id_int)))
 
