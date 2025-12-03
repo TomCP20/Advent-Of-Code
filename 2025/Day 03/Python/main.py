@@ -3,10 +3,10 @@
 
 def max_joltage(bank: list[int], digits: int) -> int:
     """Calculates the max joltage of a bank"""
+    if digits == 1:
+        return max(bank)
     digits -= 1
     i, digit = max(enumerate(bank[: len(bank) - digits]), key=lambda x : x[1])
-    if digits == 0:
-        return digit
     return digit * 10**digits + max_joltage(bank[i + 1 :], digits)
 
 
