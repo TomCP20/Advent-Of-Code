@@ -23,7 +23,7 @@ def part_1(num_lines: list[str], operators: list[str]) -> int:
 def part_2(num_lines: list[str], operators: list[str]) -> int:
     """Solves Part 2"""
     str_columns = map("".join, zip(*num_lines))
-    groups = groupby(str_columns, lambda s: s == " " * len(num_lines))
+    groups = groupby(str_columns, str.isspace)
     num_columns = (map(int, group) for is_gap, group in groups if not is_gap)
     return solve_problems(num_columns, operators)
 
