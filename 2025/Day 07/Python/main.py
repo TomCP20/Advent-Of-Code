@@ -1,7 +1,7 @@
 """Advent of Code - 2025 - Day 7"""
 
 with open(0, encoding="utf-8") as f:
-    head, *tail = f.read().splitlines()
+    head, *tail = f.read().splitlines()[::2]
 beams: list[int] = [0] * len(head)
 beams[head.find("S")] = 1
 splits: int = 0
