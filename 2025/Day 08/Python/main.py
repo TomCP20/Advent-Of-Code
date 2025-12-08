@@ -33,12 +33,8 @@ def dfs(point: Point, edges: dict[Point, list[Point]]):
     return visited
 
 
-def part_1(n: int, sorted_paris: list[tuple[Point, Point]]):
-    """Solves Part 1"""
-    edges: dict[Point, list[Point]] = defaultdict(list)
-    for a, b in sorted_paris[:n]:
-        edges[a].append(b)
-        edges[b].append(a)
+def get_island_sizes(edges: dict[Point, list[Point]]) -> list[int]:
+    """returns the size of all islands"""
     visited: set[Point] = set()
     sizes: list[int] = []
     for point in edges:
@@ -46,29 +42,24 @@ def part_1(n: int, sorted_paris: list[tuple[Point, Point]]):
             component = dfs(point, edges)
             visited.update(component)
             sizes.append(len(component))
-    return prod(sorted(sizes, reverse=True)[:3])
+    return sizes
 
-def part_2(positions: set[Point], sorted_paris: list[tuple[Point, Point]]):
-    """Solves Part 2"""
-    seed = sorted_paris[0][0]
-    edges: dict[Point, list[Point]] = defaultdict(list)
-    for a, b in sorted_paris:
-        edges[a].append(b)
-        edges[b].append(a)
-        if len(positions) == len(edges) and len(positions) == len(dfs(seed, edges)):
-            return a[0]*b[0]
-    assert False
 
 def main():
     """main"""
     with open(0, encoding="utf-8") as f:
         lines = f.read().splitlines()
-    n: int = 10 if len(lines) == 20 else 1000
     positions = set(map(parse_line, lines))
-    pairs = combinations(positions, 2)
-    sorted_paris = sorted(pairs, key=dist)
-    print(part_1(n, sorted_paris))
-    print(part_2(positions, sorted_paris))
+    pairs = sorted(combinations(positions, 2), key=dist)
+    edges: dict[Point, list[Point]] = defaultdict(list)
+    for i, (a, b) in enumerate(pairs):
+        edges[a].append(b)
+        edges[b].append(a)
+        if i == (10 if len(lines) == 20 else 1000): # part 1
+            print(prod(sorted(get_island_sizes(edges), reverse=True)[:3]))
+        if len(edges) == len(positions) == len(dfs(pairs[0][0], edges)): # part 2
+            print(a[0] * b[0])
+            break
 
 
 main()
