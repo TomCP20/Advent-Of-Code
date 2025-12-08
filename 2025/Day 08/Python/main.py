@@ -55,7 +55,7 @@ def part_2(positions: set[Point], sorted_paris: list[tuple[Point, Point]]):
     for a, b in sorted_paris:
         edges[a].append(b)
         edges[b].append(a)
-        if len(positions) == len(dfs(seed, edges)):
+        if len(positions) == len(edges) and len(positions) == len(dfs(seed, edges)):
             return a[0]*b[0]
     assert False
 
