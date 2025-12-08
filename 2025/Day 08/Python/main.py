@@ -20,29 +20,44 @@ def dist(pair: tuple[Point, Point]) -> int:
     return (x1 - x2) ** 2 + (y1 - y2) ** 2 + (z1 - z2) ** 2
 
 
+def dfs(point: Point, edges: dict[Point, list[Point]]):
+    """Depth First Search"""
+    stack: list[Point] = [point]
+    visited: set[Point] = set()
+    while stack:
+        point = stack.pop()
+        if point not in visited:
+            visited.add(point)
+            for neighbor in edges[point]:
+                stack.append(neighbor)
+    return visited
+
+
 def part_1(n: int, sorted_paris: list[tuple[Point, Point]]):
     """Solves Part 1"""
     edges: dict[Point, list[Point]] = defaultdict(list)
     for a, b in sorted_paris[:n]:
         edges[a].append(b)
         edges[b].append(a)
-
     visited: set[Point] = set()
     sizes: list[int] = []
     for point in edges:
         if point not in visited:
-            stack: list[Point] = [point]
-            size: int = 0
-            while stack:
-                node = stack.pop()
-                if node not in visited:
-                    visited.add(node)
-                    size += 1
-                    for neighbor in edges[node]:
-                        stack.append(neighbor)
-            sizes.append(size)
+            component = dfs(point, edges)
+            visited.update(component)
+            sizes.append(len(component))
     return prod(sorted(sizes, reverse=True)[:3])
 
+def part_2(positions: set[Point], sorted_paris: list[tuple[Point, Point]]):
+    """Solves Part 2"""
+    seed = sorted_paris[0][0]
+    edges: dict[Point, list[Point]] = defaultdict(list)
+    for a, b in sorted_paris:
+        edges[a].append(b)
+        edges[b].append(a)
+        if len(positions) == len(dfs(seed, edges)):
+            return a[0]*b[0]
+    assert False
 
 def main():
     """main"""
@@ -53,6 +68,7 @@ def main():
     pairs = combinations(positions, 2)
     sorted_paris = sorted(pairs, key=dist)
     print(part_1(n, sorted_paris))
+    print(part_2(positions, sorted_paris))
 
 
 main()
