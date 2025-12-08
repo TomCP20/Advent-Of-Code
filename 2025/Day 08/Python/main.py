@@ -3,7 +3,6 @@
 from collections import defaultdict
 from itertools import combinations
 from math import prod
-import heapq
 
 
 Point = tuple[int, int, int]
@@ -34,10 +33,10 @@ def dfs(point: Point, edges: dict[Point, list[Point]]):
     return visited
 
 
-def part_1(n: int, pairs: list[tuple[Point, Point]]):
+def part_1(n: int, sorted_paris: list[tuple[Point, Point]]):
     """Solves Part 1"""
     edges: dict[Point, list[Point]] = defaultdict(list)
-    for a, b in heapq.nsmallest(n, pairs, key=dist):
+    for a, b in sorted_paris[:n]:
         edges[a].append(b)
         edges[b].append(a)
     visited: set[Point] = set()
@@ -47,7 +46,7 @@ def part_1(n: int, pairs: list[tuple[Point, Point]]):
             component = dfs(point, edges)
             visited.update(component)
             sizes.append(len(component))
-    return prod(heapq.nlargest(3, sizes))
+    return prod(sorted(sizes, reverse=True)[:3])
 
 def part_2(positions: set[Point], sorted_paris: list[tuple[Point, Point]]):
     """Solves Part 2"""
@@ -66,9 +65,9 @@ def main():
         lines = f.read().splitlines()
     n: int = 10 if len(lines) == 20 else 1000
     positions = set(map(parse_line, lines))
-    pairs = list(combinations(positions, 2))
-    print(part_1(n, pairs))
+    pairs = combinations(positions, 2)
     sorted_paris = sorted(pairs, key=dist)
+    print(part_1(n, sorted_paris))
     print(part_2(positions, sorted_paris))
 
 
