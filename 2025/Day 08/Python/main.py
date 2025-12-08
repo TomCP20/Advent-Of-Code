@@ -20,29 +20,39 @@ def dist(pair: tuple[Point, Point]) -> int:
     return (x1 - x2) ** 2 + (y1 - y2) ** 2 + (z1 - z2) ** 2
 
 
-with open(0, encoding="utf-8") as f:
-    lines = f.read().splitlines()
-n: int = 10 if len(lines) == 20 else 1000
-positions = set(map(parse_line, lines))
-pairs = combinations(positions, 2)
-sorted_paris = sorted(pairs, key=dist)[:n]
-edges: dict[Point, list[Point]] = defaultdict(list)
-for a, b in sorted_paris:
-    edges[a].append(b)
-    edges[b].append(a)
+def part_1(n: int, sorted_paris: list[tuple[Point, Point]]):
+    """Solves Part 1"""
+    edges: dict[Point, list[Point]] = defaultdict(list)
+    for a, b in sorted_paris[:n]:
+        edges[a].append(b)
+        edges[b].append(a)
 
-visited: set[Point] = set()
-sizes: list[int] = []
-for point in edges:
-    if point not in visited:
-        stack: list[Point] = [point]
-        size: int = 0
-        while stack:
-            node = stack.pop()
-            if node not in visited:
-                visited.add(node)
-                size += 1
-                for neighbor in edges[node]:
-                    stack.append(neighbor)
-        sizes.append(size)
-print(prod(sorted(sizes, reverse=True)[:3]))
+    visited: set[Point] = set()
+    sizes: list[int] = []
+    for point in edges:
+        if point not in visited:
+            stack: list[Point] = [point]
+            size: int = 0
+            while stack:
+                node = stack.pop()
+                if node not in visited:
+                    visited.add(node)
+                    size += 1
+                    for neighbor in edges[node]:
+                        stack.append(neighbor)
+            sizes.append(size)
+    return prod(sorted(sizes, reverse=True)[:3])
+
+
+def main():
+    """main"""
+    with open(0, encoding="utf-8") as f:
+        lines = f.read().splitlines()
+    n: int = 10 if len(lines) == 20 else 1000
+    positions = set(map(parse_line, lines))
+    pairs = combinations(positions, 2)
+    sorted_paris = sorted(pairs, key=dist)
+    print(part_1(n, sorted_paris))
+
+
+main()
