@@ -38,25 +38,25 @@ def dijkstra(buttons: list[list[int]]):
 def solve_joltage(buttons: list[list[int]], joltage: list[int, ...]) -> int:  # type: ignore
     """solves the number of buttons to press to reach the required joltage"""
     solver = z3.Optimize()
-    variables: list[z3.ArithRef] = []
+    presses_list: list[z3.ArithRef] = []
     joltages_var: list[z3.ArithRef | None] = [None] * len(joltage)
 
     for name, button in enumerate(buttons):
-        var = z3.Int(str(name))  # type: ignore
-        variables.append(var)
-        solver.add(var >= 0)  # type: ignore
+        presses = z3.Int(str(name))  # type: ignore
+        presses_list.append(presses)
+        solver.add(presses >= 0)  # type: ignore
 
-        for entry in button:
-            if joltages_var[entry] is None:
-                joltages_var[entry] = var
+        for jolt in button:
+            if joltages_var[jolt] is None:
+                joltages_var[jolt] = presses
             else:
-                joltages_var[entry] += var
+                joltages_var[jolt] += presses
 
-    for jolt_int, entry in enumerate(joltage):
+    for jolt_int, jolt in enumerate(joltage):
         if joltages_var[jolt_int] is not None:
             solver.add(joltage[jolt_int] == joltages_var[jolt_int])  # type: ignore
 
-    total_presses = solver.minimize(sum(variables))  # type: ignore
+    total_presses = solver.minimize(sum(presses_list))  # type: ignore
 
     assert solver.check() == z3.sat  # type: ignore
     return total_presses.value().as_long()  # type: ignore
