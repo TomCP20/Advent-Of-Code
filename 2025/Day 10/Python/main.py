@@ -2,7 +2,7 @@
 
 import heapq
 
-import z3  # type: ignore
+import scipy.optimize
 
 
 def parse_line(line: str) -> tuple[int, list[list[int]], list[int]]:
@@ -34,32 +34,18 @@ def dijkstra(buttons: list[list[int]]):
 
     return dist
 
+# Ax = b
+# x = A^(+)b + (I-A^(+)A)w
 
-def solve_joltage(buttons: list[list[int]], joltage: list[int, ...]) -> int:  # type: ignore
+def solve_joltage(buttons: list[list[int]], joltage: list[int]) -> int:
     """solves the number of buttons to press to reach the required joltage"""
-    solver = z3.Optimize()
-    presses_list: list[z3.ArithRef] = []
-    joltages_var: list[z3.ArithRef | None] = [None] * len(joltage)
-
-    for name, button in enumerate(buttons):
-        presses = z3.Int(str(name))  # type: ignore
-        presses_list.append(presses)
-        solver.add(presses >= 0)  # type: ignore
-
-        for jolt in button:
-            if joltages_var[jolt] is None:
-                joltages_var[jolt] = presses
-            else:
-                joltages_var[jolt] += presses
-
-    for jolt_int, jolt in enumerate(joltage):
-        if joltages_var[jolt_int] is not None:
-            solver.add(joltage[jolt_int] == joltages_var[jolt_int])  # type: ignore
-
-    total_presses = solver.minimize(sum(presses_list))  # type: ignore
-
-    assert solver.check() == z3.sat  # type: ignore
-    return total_presses.value().as_long()  # type: ignore
+    h = len(joltage)
+    w = len(buttons)
+    a: list[list[int]] = [[int(i in button) for button in buttons] for i in range(h)]
+    x = scipy.optimize.linprog([1] * w, A_eq=a, b_eq=joltage, integrality=1)
+    out = x.fun
+    assert out is not None
+    return round(out)
 
 
 def main():
