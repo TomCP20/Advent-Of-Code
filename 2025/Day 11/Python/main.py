@@ -22,7 +22,7 @@ def count_paths(graph: dict[str, list[str]], start: str, goal: str):
 
 
 def main():
-    """Solves Part 1 and 2 of Day 10"""
+    """Solves Part 1 and 2 of Day 11"""
     with open(0, encoding="utf-8") as f:
         graph: dict[str, list[str]] = dict(map(parse_line, f.readlines()))
     graph["out"] = []
