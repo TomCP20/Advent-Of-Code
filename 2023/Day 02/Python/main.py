@@ -73,8 +73,8 @@ def main():
     """Solves Part 1 and 2 of Day 2"""
     with open(0, encoding="utf-8") as f:
         games = f.read().splitlines()
-        print(sum(get_game_id(game) for game in games if is_game_possible(game)))
-        print(sum(get_game_power(game) for game in games))
+    print(sum(get_game_id(game) for game in games if is_game_possible(game)))
+    print(sum(get_game_power(game) for game in games))
 
 
 main()
