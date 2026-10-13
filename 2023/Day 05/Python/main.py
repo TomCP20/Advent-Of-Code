@@ -4,6 +4,7 @@ import itertools
 
 
 def new_seed(seed: int, ranges: list[tuple[int, int, int]]):
+    """Calculates the next seed"""
     for dest, src, rng in ranges:
         if seed in range(src, src + rng):
             return seed - src + dest
@@ -11,6 +12,7 @@ def new_seed(seed: int, ranges: list[tuple[int, int, int]]):
 
 
 def new_seeds(seeds: list[tuple[int, int]], ranges: list[tuple[int, int, int]]):
+    """Calculates the next seeds"""
     new: list[tuple[int, int]] = []
     while seeds:
         new.append(new_range(seeds, ranges))
@@ -18,6 +20,7 @@ def new_seeds(seeds: list[tuple[int, int]], ranges: list[tuple[int, int, int]]):
 
 
 def new_range(seeds: list[tuple[int, int]], ranges: list[tuple[int, int, int]]):
+    """Calculates the next range"""
     start, end = seeds.pop()
     for destination, source, value_range in ranges:
         os = max(start, source)
@@ -32,6 +35,7 @@ def new_range(seeds: list[tuple[int, int]], ranges: list[tuple[int, int, int]]):
 
 
 def parse_block_line(line: str):
+    """Parses a line into a tuple of ints"""
     dest, src, rng = line.split()
     return (int(dest), int(src), int(rng))
 
