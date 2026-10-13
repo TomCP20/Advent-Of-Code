@@ -5,7 +5,7 @@ import re
 
 def get_game_count(game: str):
     """Calculates the count of winning numbers in my numbers for a game"""
-    match = re.match(r"^Card [ \d]{2}\d: ([ \d]{29}) [|] ([ \d]{74})$", game)
+    match = re.fullmatch(r"^Card [ \d]+\d: ([ \d]+) [|] ([ \d]+)$", game)
     assert match
     winning_numbers = set(map(int, match.group(1).split()))
     my_numbers = set(map(int, match.group(2).split()))
@@ -16,9 +16,7 @@ def get_game_count(game: str):
 def get_game_score(game: str):
     """Calculates the score of a game"""
     count = get_game_count(game)
-    if count == 0:
-        return 0
-    return 2 ** (count - 1)
+    return 0 if count == 0 else 2 ** (count - 1)
 
 
 def main():
