@@ -71,5 +71,19 @@ def main():
 
     print(len(visited) // 2)
 
+    enclosed: set[tuple[int, int]] = set()
+    for y, row in enumerate(maze):
+        inside = False
+        for x, pipe in enumerate(row):
+            pos = (x, y)
+            if pos in visited:
+                # The S here is exclusively for the case where it replaces an |, L or J.
+                # It should be removed otherwise.
+                if pipe in "|LJS":
+                    inside = not inside
+            elif inside:
+                enclosed.add(pos)
+    print(len(enclosed))
+
 
 main()
