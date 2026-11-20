@@ -27,29 +27,30 @@ def get_connected(maze: list[str], pos: tuple[int, int]) -> list[tuple[int, int]
     """Find all the positions connected to the current one."""
     x, y = pos
     shape = maze[y][x]
+    connected: list[tuple[int, int]]
     match shape:
         case "|":
-            return [(x, y + 1), (x, y - 1)]
+            connected = [(x, y + 1), (x, y - 1)]
         case "-":
-            return [(x + 1, y), (x - 1, y)]
+            connected = [(x + 1, y), (x - 1, y)]
         case "L":
-            return [(x, y - 1), (x + 1, y)]
+            connected = [(x, y - 1), (x + 1, y)]
         case "J":
-            return [(x, y - 1), (x - 1, y)]
+            connected = [(x, y - 1), (x - 1, y)]
         case "7":
-            return [(x - 1, y), (x, y + 1)]
+            connected = [(x - 1, y), (x, y + 1)]
         case "F":
-            return [(x + 1, y), (x, y + 1)]
+            connected = [(x + 1, y), (x, y + 1)]
         case "S":
-            out: list[tuple[int, int]] = []
+            connected = []
             for xc, yc in get_adjacent(maze, pos):
                 if maze[yc][xc] in "|-LJ7F":
-                    connected = get_connected(maze, (xc, yc))
-                    if connected and pos in connected:
-                        out.append((xc, yc))
-            return out
+                    adj_connected = get_connected(maze, (xc, yc))
+                    if adj_connected and pos in adj_connected:
+                        connected.append((xc, yc))
         case _:
             assert False, f"invalid case {shape}"
+    return connected
 
 
 def get_next_node(
