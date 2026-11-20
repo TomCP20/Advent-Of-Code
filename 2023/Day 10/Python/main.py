@@ -2,6 +2,7 @@
 
 
 def find_start(maze: list[str]) -> tuple[int, int]:
+    """Find the start of the maze represented by the S character."""
     for y, row in enumerate(maze):
         x = row.find("S")
         if x != -1:
@@ -10,6 +11,7 @@ def find_start(maze: list[str]) -> tuple[int, int]:
 
 
 def get_adjacent(maze: list[str], start_pos: tuple[int, int]):
+    """A generator that yields adjacent positions within the map."""
     x, y = start_pos
     if x > 0:
         yield (x - 1, y)  # West
@@ -22,6 +24,7 @@ def get_adjacent(maze: list[str], start_pos: tuple[int, int]):
 
 
 def get_connected(maze: list[str], pos: tuple[int, int]) -> list[tuple[int, int]]:
+    """Find all the positions connected to the current one."""
     x, y = pos
     shape = maze[y][x]
     match shape:
@@ -52,6 +55,7 @@ def get_connected(maze: list[str], pos: tuple[int, int]) -> list[tuple[int, int]
 def get_next_node(
     maze: list[str], node: tuple[int, int], visited: set[tuple[int, int]]
 ):
+    """Get the next node that hasn't been visited yet."""
     for next_node in get_connected(maze, node):
         if next_node not in visited:
             return next_node
