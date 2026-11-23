@@ -5,12 +5,12 @@ import subprocess
 
 dirname = os.path.dirname(__file__)
 
-YEAR = 2025
-DAYS = 12
+YEAR = 2023
+DAYS = 25
 INPUTS = True
 PYTHON = True
 CPP = False
-CS = True
+CS = False
 FS = False
 RUST = False
 
@@ -28,7 +28,15 @@ for i in range(1, DAYS+1):
     if PYTHON:
         cwd = os.path.join(day_path, "Python")
         os.makedirs(cwd)
-        makefile(cwd, "main.py")
+        with open(os.path.join(cwd, "main.py"), 'w', encoding="utf-8") as f:
+            f.writelines([
+                f"\"\"\"Advent of Code - {YEAR} - Day {i}\"\"\"\n\n\n",
+                "def main():\n",
+                f"    \"\"\"Solves Part 1 and 2 of Day {i}\"\"\"\n",
+                "    with open(0, encoding=\"utf-8\") as f:\n",
+                "        print(f.read().splitlines())\n\n\n"
+                "main()\n"
+            ])
     if CPP:
         cwd = os.path.join(day_path, "C++")
         os.makedirs(cwd)
